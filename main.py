@@ -29,8 +29,9 @@ def empty_board():
             print(row, end = ' ')
             for _ in range(7):
                 print('※ ', end = '')
-        print()
-    
+            print()
+        else:
+            
 
 
 
