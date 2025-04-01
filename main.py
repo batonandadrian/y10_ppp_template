@@ -20,8 +20,13 @@ def instructions():
 
 def play():
     print("Let's play!")
-    names = [input('Player 1 (White), enter your name.'),input('Player 2 (Black), enter your name.')]
+    names = [input('Player 1 (White), enter your name.\n'),input('Player 2 (Black), enter your name.\n')]
+    empty_board()
     
+def empty_board():
+    for row in range(8,0,-1):
+        print(row)
+
 
 
 def menu():
