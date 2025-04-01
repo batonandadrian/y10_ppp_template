@@ -20,8 +20,8 @@ def instructions():
 
 def play():
     print("Let's play!")
-
-
+    names = [input('Player 1 (White), enter your name.'),input('Player 2 (Black), enter your name.')]
+    
 
 
 def menu():
