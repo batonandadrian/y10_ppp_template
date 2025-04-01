@@ -1,4 +1,4 @@
-
+# testing
 # Chess 960
 import random
 from colorama import Fore
@@ -20,7 +20,7 @@ def instructions():
 
 def play():
     print("Let's play!")
-    
+
 
 
 
