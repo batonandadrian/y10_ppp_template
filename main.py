@@ -24,11 +24,13 @@ def play():
     empty_board()
 
 def empty_board():
-    for row in range(8,0,-1):
-        print(row, end = ' ')
-        for i in range(7):
-            print('※ ', end = '')
+    for row in range(8,-1,-1):
+        if row != 0:
+            print(row, end = ' ')
+            for _ in range(7):
+                print('※ ', end = '')
         print()
+    
 
 
 
