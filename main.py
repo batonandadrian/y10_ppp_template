@@ -12,6 +12,7 @@ import os
 
 def main():
     '''Opens up the menu'''
+    names = ['', '']
     board = [['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.'],
@@ -21,10 +22,12 @@ def main():
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.']]
     menu_result = menu()
-    if menu_result == '1':
+    while menu_result == '1':
         instructions()
-    else:
-        board = play(board)
+        menu_result = menu()
+    
+    names = setup_players()
+    board = setup_board()
     menu(board)
 
 def clear():
@@ -41,12 +44,20 @@ def instructions():
         #WORK IN PROGRESS
         #NOT A PRIORITY TO BE WORKED ON
 
-def play(board):
-    '''Inputs names from user - starts up a new board'''
+def setup_players():
     print("Let's play!")
     names = [input('Player 1 (White), enter your name.\n'), input('Player 2 (Black), enter your name.\n')]
+    return names
+
+def setup_board():
     board = random_board(board)
     display_board(board)
+    return board
+
+def turn(board):
+    '''Inputs names from user - starts up a new board'''
+    
+    
     return board
 
 def empty_board():
