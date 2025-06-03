@@ -21,13 +21,10 @@ def main():
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.']]
     menu_result = menu()
-    while menu_result not in ['1','2']: #user might enter '12' and this code wouldn't support it
-        clear()
-        menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     if menu_result == '1':
         instructions()
     else:
-        play(board)
+        board = play(board)
     menu(board)
 
 def clear():
@@ -50,6 +47,7 @@ def play(board):
     names = [input('Player 1 (White), enter your name.\n'), input('Player 2 (Black), enter your name.\n')]
     board = random_board(board)
     display_board(board)
+    return board
 
 def empty_board():
     '''Uses for loops to create an empty board, with numbers and letters to display row and column'''
@@ -97,6 +95,9 @@ def random_board(board):
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
+    while menu_result not in ['1','2']: #user might enter '12' and this code wouldn't support it
+        clear()
+        menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
 
 menu()
