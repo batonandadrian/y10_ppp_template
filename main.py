@@ -6,13 +6,29 @@ import os
 #print(Fore.RED + 'This text is red in color')
 
 '''Globals '''
-
+# Default to empty board
 
 
 
 def main():
     '''Opens up the menu'''
-    menu()
+    board = [['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.'],
+        ['.','.','.','.','.','.','.','.']]
+    menu_result = menu()
+    while menu_result not in ['1','2']: #user might enter '12' and this code wouldn't support it
+        clear()
+        menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
+    if menu_result == '1':
+        instructions()
+    else:
+        play(board)
+    menu(board)
 
 def clear():
     '''Clearing the screen'''
@@ -28,15 +44,15 @@ def instructions():
         #WORK IN PROGRESS
         #NOT A PRIORITY TO BE WORKED ON
 
-def play():
+def play(board):
     '''Inputs names from user - starts up a new board'''
     print("Let's play!")
-    names = [input('Player 1 (White), enter your name.\n'),input('Player 2 (Black), enter your name.\n')]
-    empty_board()
+    names = [input('Player 1 (White), enter your name.\n'), input('Player 2 (Black), enter your name.\n')]
+    board = random_board(board)
+    display_board(board)
 
 def empty_board():
     '''Uses for loops to create an empty board, with numbers and letters to display row and column'''
-    global board
     board = [['.','.','.','.','.','.','.','.'],
              ['.','.','.','.','.','.','.','.'],
              ['.','.','.','.','.','.','.','.'],
@@ -45,10 +61,10 @@ def empty_board():
              ['.','.','.','.','.','.','.','.'],
              ['.','.','.','.','.','.','.','.'],
              ['.','.','.','.','.','.','.','.']]
-    display_board(board)
-
+    return board
 def display_board(board):
     '''Display board'''
+    clear()
     current_column = ord('A')
     current_row = 8
     for line in board:
@@ -65,17 +81,22 @@ def display_board(board):
 
     print(f"  {column_display}")
 
-def random_board():
-    
+def random_board(board):
+    white_shuffle = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘']
+    black_shuffle = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞']
 
+    random.shuffle(white_shuffle)
+    random.shuffle(black_shuffle)
+
+    board[-1] = white_shuffle
+    board[0] = black_shuffle
+
+    board[-2] = ['♙'] * 8
+    board[1] = ['♟'] * 8
+    return board
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
-    while menu_result not in '12': #user might enter '12' and this code wouldn't support it
-        clear()
-        menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
-    if menu_result == '1':
-        instructions()
-    else:
-        play()
+    return menu_result
+
 menu()
