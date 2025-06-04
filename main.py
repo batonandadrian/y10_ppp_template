@@ -20,10 +20,10 @@ def main():
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.']]
     menu_result = menu()
-    while menu_result == '1':
+    if menu_result == '1':
         instructions()
         menu_result = menu()
-    else:
+    elif menu_result == '2':
         names = setup_players()
         board = setup_board()
         menu(board)
