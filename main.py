@@ -4,8 +4,6 @@ import random
 from colorama import Fore
 import os
 #print(Fore.RED + 'This text is red in color')
-
-'''Globals '''
 # Default to empty board
 
 
@@ -25,10 +23,10 @@ def main():
     while menu_result == '1':
         instructions()
         menu_result = menu()
-    
-    names = setup_players()
-    board = setup_board()
-    menu(board)
+    else:
+        names = setup_players()
+        board = setup_board()
+        menu(board)
 
 def clear():
     '''Clearing the screen'''
@@ -106,7 +104,7 @@ def random_board(board):
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
-    while menu_result not in ['1','2']: #user might enter '12' and this code wouldn't support it
+    while menu_result not in ['1','2']:
         clear()
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
