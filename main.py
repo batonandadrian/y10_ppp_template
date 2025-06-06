@@ -35,7 +35,7 @@ def clear():
 def instructions():
     '''Displays instructions - Checks for which type of thing the user needs help on'''
     clear()
-    while instruct_result not in '1 2 3 4 5 6 7 8 9 10 11 12': #user might enter '11 12' and this code wouldn't stop it
+    while instruct_result not in '1 2 3 4 5 6 7 8 9 10 11 12': 
         instruct_result = input('Which part of the game would you like to know more? \n1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n10. Losses \n11. Draws \n')
     if instruct_result == '1':
         pass
@@ -102,10 +102,11 @@ def random_board(board):
     board[-2] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
     board[1] = ['♟'] * 8 #makes the 2nd row from the top pawns
     return board
+
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
-    while menu_result not in ['1','2']:
+    while menu_result not in ['1', '2']:
         print('TEST')
         clear()
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
