@@ -89,6 +89,7 @@ def display_board(board):
     print(f"  {column_display}")
 
 def random_board(board):
+    '''Shuffles the pieces, setting the whole row of white and black pieces to the 8th and 1st rank with board[-1] and board[0]'''
     white_shuffle = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘']
     black_shuffle = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞']
 
@@ -98,13 +99,14 @@ def random_board(board):
     board[-1] = white_shuffle
     board[0] = black_shuffle
 
-    board[-2] = ['♙'] * 8
-    board[1] = ['♟'] * 8
+    board[-2] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
+    board[1] = ['♟'] * 8 #makes the 2nd row from the top pawns
     return board
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     while menu_result not in ['1','2']:
+        print('TEST')
         clear()
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
