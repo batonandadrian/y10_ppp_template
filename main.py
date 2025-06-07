@@ -82,6 +82,10 @@ def move(colour,names,board):
         while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
             start_square = input(f'Where is your starting square, {names[0]}?\n')
             end_square = input(f'Where is your starting square, {names[0]}?\n')
+            '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
+            # used to skip legal moves while it is not finished
+            conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
+            '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                     conditions_met = True
