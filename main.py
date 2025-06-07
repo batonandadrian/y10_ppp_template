@@ -5,8 +5,15 @@ from colorama import Fore
 import os
 #print(Fore.RED + 'This text is red in color')
 # Default to empty board
-
-
+'''
+TASKS:
+- ADD try: except: and while: to prevent errors
+- ADD movement restrictions
+- ADD turn restrictions
+'''
+#git stage *
+#git commit -m "message"
+#git push
 
 def main():
     '''Opens up the menu'''
@@ -19,6 +26,8 @@ def main():
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.']]
+
+    #board[0] is row 8 and board[-1] is row 1
     menu_result = menu()
     if menu_result == '1':
         instructions()
@@ -32,8 +41,8 @@ def main():
     #while the game hasn't ended, repeat turns
     colour = 'White'
     while game_in_progress:
-        start_turn(colour, names)
-        display_board() #not going to work, needs an update_board() function
+        start_turn(colour, names, board)
+        display_board(board) #not going to work, needs an update_board() function
         turn(colour)
 
 def clear():
@@ -57,33 +66,53 @@ def turn(colour_of_turn):
     else:
         colour_of_turn = 'Black'
 
-def start_turn(colour,names):
+def start_turn(colour,names,board):
     '''Tells the player of the turn that it is their turn to make a move. Calls move() so that they can start selecting a move'''
     if colour == 'White':
         print(f'{names[0]}, it is your turn to make a move.')
     else:
         print(f'{names[1]}, it is your turn to make a move.')
-    move(colour,names)
+    move(colour,names,board)
 
-def move(colour,names):
+def move(colour,names,board):
     '''Checks if their move is possible and moves it if it is'''
     if colour == 'White': #conditions for white
-        move = input(f'What is your move, {names[0]}?\n')
-        
+        start_square = input(f'Where is your starting square, {names[0]}?\n')
+        end_square = input(f'Where is your starting square, {names[0]}?\n')
         #needs to check the piece at square
         #then according to the piece, check for legal moves for that specific piece
         #if not legal, redo the move
-        #if legal, do the move and display board
+        #if legal, do the move and update board
 
 
-
+        return update_board(start_square,end_square,board)
         pass
     else: #conditions for black
         pass #work in progress
 
-def check_piece_at_square(square):
+def check_piece_at_square(square,board):
     '''Returns the piece at the square when put into the format  "letternumber" '''
-    pass # work in progress
+    square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
+    row = int(square[1])
+    row = abs(row - 8)
+
+    '''
+    When s is 5, row is 3
+    When s is 6, row is 2
+    When s is 7, row is 1
+    When s is 8, row is 0
+    '''
+    column = int(square[0]) #since the column has been adjusted using ord, it is already correct
+    return board[row][column] #returning the piece at the square by getting the row then the column
+
+def edit_square(square,piece,board):
+    '''Changes the piece at the square when put into the format  "letternumber" '''
+    square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
+    row = int(square[1])
+    row = abs(row - 8)
+    column = int(square[0]) 
+    board[row][column] = piece #changing the piece at the square
+    return board
 
 def setup_players():
     print("Let's play!")
@@ -107,6 +136,7 @@ def empty_board():
              ['.','.','.','.','.','.','.','.'],
              ['.','.','.','.','.','.','.','.']]
     return board
+
 def display_board(board):
     '''Display board'''
     clear()
@@ -126,6 +156,15 @@ def display_board(board):
 
     print(f"  {column_display}")
 
+def update_board(start,end,board):
+    '''Takes in a move, updates and returns the board'''
+    moving_piece = check_piece_at_square(start,board)
+    while moving_piece == '.': #prevents empty squares from moving
+        moving_piece = check_piece_at_square(start,board) #checks what piece it is moving from the start
+    board = edit_square(end,moving_piece,board) #gets the new board from edit_square after setting the piece on the end square
+    board = edit_square(start,'.',board) #sets the square it moved away from to blank
+    return board
+
 def random_board(random_board):
     '''Shuffles the pieces, setting the whole row of white and black pieces to the 8th and 1st rank with board[-1] and board[0]'''
     white_shuffle = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘']
@@ -134,11 +173,11 @@ def random_board(random_board):
     random.shuffle(white_shuffle)
     random.shuffle(black_shuffle)
 
-    random_board[-1] = white_shuffle
-    random_board[0] = black_shuffle
+    random_board[0] = white_shuffle
+    random_board[-1] = black_shuffle
 
-    random_board[-2] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
-    random_board[1] = ['♟'] * 8 #makes the 2nd row from the top pawns
+    random_board[1] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
+    random_board[-2] = ['♟'] * 8 #makes the 2nd row from the top pawns
     return random_board
 
 def menu():
