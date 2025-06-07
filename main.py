@@ -94,26 +94,13 @@ def move(colour,names,board):
 
 def check_piece_at_square(square,board):
     '''Returns the piece at the square when put into the format  "letternumber" '''
-    square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
-    row = int(square[1])
-    row = abs(row - 8)
-
-    '''
-    When s is 5, row is 3
-    When s is 6, row is 2
-    When s is 7, row is 1
-    When s is 8, row is 0
-    '''
-    column = int(square[0]) #since the column has been adjusted using ord, it is already correct
-    return board[row][column] #returning the piece at the square by getting the row then the column
+    square = turn_notation_compatible(square)
+    return board[square[0]][square[1]] #returning the piece at the square by getting the row then the column
 
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
-    square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
-    row = int(square[1])
-    row = abs(row - 8)
-    column = int(square[0]) 
-    board[row][column] = piece #changing the piece at the square
+    square = turn_notation_compatible(square)
+    board[square[0]][square[1]] = piece #changing the piece at the square
     return board
 
 def setup_players():
@@ -233,11 +220,9 @@ def pieces_in_between(start,end,mode,board):
         pass
 
 def turn_notation_compatible(square):
-    '''Turns chess notation into row, columns so that it can be found on the chessboard.'''
-    square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
+    '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
     row = int(square[1])
     row = abs(row - 8)
-    column = int(square[0])
-
+    column = int(str(ord(square[0]) - 97))
     return int(str(column) + str(row))
 main()
