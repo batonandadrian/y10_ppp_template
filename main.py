@@ -79,11 +79,10 @@ def move(colour,names,board):
     if colour == 'White': #conditions for white
         start_square = input(f'Where is your starting square, {names[0]}?\n')
         end_square = input(f'Where is your starting square, {names[0]}?\n')
-        #needs to check the piece at square
-        #then according to the piece, check for legal moves for that specific piece
-        #if not legal, redo the move
-        #if legal, do the move and update board
-
+        while condition_not_met:
+            start_square = input(f'Where is your starting square, {names[0]}?\n')
+            end_square = input(f'Where is your starting square, {names[0]}?\n')
+        #not complete
 
         return update_board(start_square,end_square,board)
         pass
