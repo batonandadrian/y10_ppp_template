@@ -79,7 +79,7 @@ def move(colour,names,board):
     if colour == 'White': #conditions for white
         start_square = input(f'Where is your starting square, {names[0]}?\n')
         end_square = input(f'Where is your starting square, {names[0]}?\n')
-        while condition_not_met:
+        while False:
             start_square = input(f'Where is your starting square, {names[0]}?\n')
             end_square = input(f'Where is your starting square, {names[0]}?\n')
         #not complete
