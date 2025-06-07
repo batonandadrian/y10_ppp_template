@@ -223,6 +223,6 @@ def turn_notation_compatible(square):
     '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
     row = int(square[1])
     row = abs(row - 8)
-    column = int(str(ord(square[0]) - 97))
-    return int(str(column) + str(row))
+    column = (ord(square[0]) - 97)
+    return [column, row]
 main()
