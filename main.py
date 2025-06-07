@@ -228,5 +228,6 @@ def turn_notation_compatible(square):
     row = int(square[1])
     row = abs(row - 8)
     column = (ord(square[0]) - 97)
+    print([column, row])
     return [column, row]
 main()
