@@ -99,12 +99,12 @@ def move(colour,names,board):
 def check_piece_at_square(square,board):
     '''Returns the piece at the square when put into the format  "letternumber" '''
     square = turn_notation_compatible(square)
-    return board[square[0]][square[1]] #returning the piece at the square by getting the row then the column
+    return board[square[1]][square[0]] #returning the piece at the square by getting the row then the column
 
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
     square = turn_notation_compatible(square)
-    board[square[0]][square[1]] = piece #changing the piece at the square
+    board[square[1]][square[0]] = piece #changing the piece at the square
     return board
 
 def setup_players():
