@@ -132,7 +132,7 @@ def empty_board():
 
 def display_board(board):
     '''Display board'''
-    clear()
+    #clear() FOR TESTING ONLY! REMOVE # after complete
     current_column = ord('A')
     current_row = 8
     for line in board:
@@ -178,7 +178,7 @@ def menu():
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     while menu_result not in ['1', '2']:
         print('TEST')
-        clear()
+        #clear() TESTING ONLY! REMOVE # WHEN COMPLETE
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
 
