@@ -232,7 +232,8 @@ def pieces_in_between(start,end,mode,board):
     else: #mode = diagonal
         pass
 
-def turn_notation_into_numbers(square):
+def turn_notation_compatible(square):
+    '''Turns chess notation into row, columns so that it can be found on the chessboard.'''
     square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
     row = int(square[1])
     row = abs(row - 8)
