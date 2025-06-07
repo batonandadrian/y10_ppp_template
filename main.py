@@ -78,13 +78,13 @@ def start_turn(colour,names,board):
 def move(colour,names,board):
     '''Checks if their move is possible and moves it if it is'''
     if colour == 'White': #conditions for white
-        conditions_met = False
-        while conditions_met == False:
+        conditions_met = True
+        while not conditions_met:
             start_square = input(f'Where is your starting square, {names[0]}?\n')
             end_square = input(f'Where is your starting square, {names[0]}?\n')
             if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
-                    conditions_met = True 
+                    conditions_met = False
         #not complete
 
         return update_board(start_square,end_square,board)
