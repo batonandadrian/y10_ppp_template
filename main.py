@@ -212,4 +212,31 @@ def rook_conditions(start,end,board,colour):
 def bishop_conditions(start,end,board,colour):
     pass
 
+def pieces_in_between(start,end,mode,board):
+    '''
+    Has 3 modes, vertical, horizontal, diagonal. 
+    Uses the board to check (exclusive) of any piece in between other pieces
+    '''
+    if mode == 'vertical': #checks the rows
+        #code below turns chess square notation eg 'e4'
+        #into row, column notation
+        start = str(ord(start[0]) - 97) + start[1] 
+        start_row = int(start[1])
+        start_row = abs(start_row - 8)
+        start_column = int(start[0])
+
+        for i in range():
+            pass
+    elif mode == 'horizontal':
+        pass
+    else: #mode = diagonal
+        pass
+
+def turn_notation_into_numbers(square):
+    square = str(ord(square[0]) - 97) + square[1] #making the letternumber format into a numbernumber format
+    row = int(square[1])
+    row = abs(row - 8)
+    column = int(square[0])
+
+    return int(str(column) + str(row))
 main()
