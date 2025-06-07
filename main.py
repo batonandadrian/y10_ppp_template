@@ -195,6 +195,9 @@ def king_conditions(start,end,board,colour):
     pass
 
 def queen_conditions(start,end,board,colour):
+    #could combine rook and bishop conditions
+    if rook_conditions() or bishop_conditions():
+        return True
     pass
 
 def pawn_conditions(start,end,board,colour):
