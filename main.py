@@ -15,6 +15,7 @@ TASKS:
 #git commit -m "message"
 #git push
 
+
 def main():
     '''Opens up the menu'''
     names = ['', '']
@@ -77,11 +78,13 @@ def start_turn(colour,names,board):
 def move(colour,names,board):
     '''Checks if their move is possible and moves it if it is'''
     if colour == 'White': #conditions for white
-        start_square = input(f'Where is your starting square, {names[0]}?\n')
-        end_square = input(f'Where is your starting square, {names[0]}?\n')
-        while False:
+        conditions_met = False
+        while conditions_met == False:
             start_square = input(f'Where is your starting square, {names[0]}?\n')
             end_square = input(f'Where is your starting square, {names[0]}?\n')
+            if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
+                if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
+                    conditions_met = True 
         #not complete
 
         return update_board(start_square,end_square,board)
@@ -187,5 +190,23 @@ def menu():
         clear()
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
+
+def king_conditions(start,end,board,colour):
+    pass
+
+def queen_conditions(start,end,board,colour):
+    pass
+
+def pawn_conditions(start,end,board,colour):
+    pass
+
+def knight_conditions(start,end,board,colour):
+    pass
+
+def rook_conditions(start,end,board,colour):
+    pass
+
+def bishop_conditions(start,end,board,colour):
+    pass
 
 main()
