@@ -29,6 +29,16 @@ def main():
         ['.','.','.','.','.','.','.','.']]
 
     #board[0] is row 8 and board[-1] is row 1
+    
+
+
+
+    #TESTING
+    print(turn_notation_compatible('c1'),turn_notation_compatible('c3'))
+
+
+
+
     menu_result = menu()
     if menu_result == '1':
         instructions()
