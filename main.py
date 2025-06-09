@@ -240,6 +240,7 @@ def pieces_in_between(start,end,mode,board):
             step = 1
             #iterate forwards
         for row in range(start_row,end_row + 1,step):
+            square = chr(start_column+97) + str(8-row) #converts the square back into chess notation
             pieces_between.append(check_piece_at_square(str(start_row+step)+start_column,'numnum'))
             
         print(pieces_between)
