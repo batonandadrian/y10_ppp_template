@@ -239,7 +239,7 @@ def pieces_in_between(start,end,mode,board):
         else:
             step = 1
             #iterate forwards
-        for row in range(start_row,end_row + 1,step):
+        for row in range(start_row + step,end_row ,step): #exclusive of starting square
             square = chr(start_column+97) + str(8-row) #converts the square back into chess notation
             pieces_between.append(check_piece_at_square(square,board)) #adds the piece at the square to the list
             
