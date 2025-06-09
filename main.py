@@ -244,6 +244,7 @@ def pieces_in_between(start,end,mode,board):
             pieces_between.append(check_piece_at_square(square,board)) #adds the piece at the square to the list
             
         print(pieces_between)
+        return pieces_between
     elif mode == 'horizontal':
         pass
     else: #mode = diagonal
