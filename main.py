@@ -232,14 +232,14 @@ def pieces_in_between(start,end,mode,board):
         end_column = turn_notation_compatible(end)[0]
         #vertical means it iterates through the same column, different row
         pieces_between = []
-        print(f'END ROW = {end_row}, START ROW = {start_row}')
-        for i in range(abs(end_row - start_row)): 
-            print('CYLCE')
-            if end_row < start_row: #if moving upwards 
-                #IN compatible notation, if the second number is high, that means it is lower on the board.
-                print('TEST')
-                pieces_between += check_piece_at_square(int(str(start_column)+str(start_row+1)),board,'numnum')
-        print('INC')
+        print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
+        if end_row > start_row: #if it is moving downwards
+            #turn_notation compatible reverses it. larger row = smaller row
+            step = -1 #iterate backwards
+        else:
+            step = 1
+            #iterate forwards
+            
         print(pieces_between)
     elif mode == 'horizontal':
         pass
