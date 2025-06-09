@@ -239,6 +239,8 @@ def pieces_in_between(start,end,mode,board):
         else:
             step = 1
             #iterate forwards
+        for row in range(start_row,end_row,step):
+            pieces_between.append(check_piece_at_square(str(start_row+step)+start_column,'numnum'))
             
         print(pieces_between)
     elif mode == 'horizontal':
