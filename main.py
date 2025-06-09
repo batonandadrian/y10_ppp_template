@@ -235,7 +235,7 @@ def pieces_in_between(start,end,mode,board):
         print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
         if end_row > start_row: #if it is moving downwards
             #turn_notation compatible reverses it. larger row = smaller row
-            step = -1 #iterate backwards
+            step = -1 #iterate backwards #MIGHT BE WRONG, step might be 1 when endrow > startrow
         else:
             step = 1
             #iterate forwards
