@@ -220,7 +220,8 @@ def pieces_in_between(start,end,mode,board):
         pieces_between = []
         for i in range(abs(end_row - start_row)): 
             if end_row > start_row: #if moving upwards
-                pieces_between += check_piece_at_square()
+                pieces_between += check_piece_at_square((start_row+1,start_column).join(),board,'numnum')
+        print(pieces_between)
     elif mode == 'horizontal':
         pass
     else: #mode = diagonal
