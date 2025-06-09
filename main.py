@@ -220,6 +220,7 @@ def pieces_in_between(start,end,mode,board):
         end_column = turn_notation_compatible(end)[0]
         #vertical means it iterates through the same column, different row
         pieces_between = []
+        print(f'END ROW = {end_row}, START ROW = {start_row}')
         for i in range(abs(end_row - start_row)): 
             print('CYLCE')
             if end_row > start_row: #if moving upwards
