@@ -119,7 +119,7 @@ def check_piece_at_square(square,board, mode='normal'):
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
     square = turn_notation_compatible(square)
-    board[str(square)[1]][str(square)[0]] = piece #changing the piece at the square
+    board[square[1]][square[0]] = piece #changing the piece at the square
     return board
 
 def setup_players():
@@ -249,7 +249,7 @@ def pieces_in_between(start,end,mode,board):
 def turn_notation_compatible(square):
     '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
     row = int(square[1])
-    row = abs(row - 8)
+    row = abs(row - 8) #convert to board index 0-7
     column = (ord(square[0]) - 97)
     print([column, row]) #TESTING ONLY! REMOVE AFTER FINISHED
     return [column, row]
