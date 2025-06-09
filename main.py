@@ -233,7 +233,7 @@ def pieces_in_between(start,end,mode,board):
         end_row = turn_notation_compatible(end)[1]
         end_column = turn_notation_compatible(end)[0]
         #vertical means it iterates through the same column, different row
-        pieces_between = ['Bus']
+        pieces_between = []
         print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
         if end_row > start_row: #if it is moving downwards
             #turn_notation compatible reverses it. larger row = smaller row
