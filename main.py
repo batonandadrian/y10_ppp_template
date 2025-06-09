@@ -44,7 +44,7 @@ def main():
     while game_in_progress:
         start_turn(colour, names, board)
         display_board(board) #not going to work, needs an update_board() function
-        turn(colour)
+        colour = turn(colour)
 
 def clear():
     '''Clearing the screen'''
@@ -66,6 +66,7 @@ def turn(colour_of_turn):
         colour_of_turn = 'White'
     else:
         colour_of_turn = 'Black'
+    return colour_of_turn
 
 def start_turn(colour,names,board):
     '''Tells the player of the turn that it is their turn to make a move. Calls move() so that they can start selecting a move'''
