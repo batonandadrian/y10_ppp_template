@@ -223,9 +223,7 @@ def pieces_in_between(start,end,mode,board):
     Has 3 modes, vertical, horizontal, diagonal. 
     Uses the board to check (exclusive) of any piece in between other pieces
     '''
-    print('TEST 2')
     if mode == 'vertical': #checks the rows
-        print('TEST v')
         #code below turns chess square notation eg 'e4'
         #into row, column notation
         start_row = turn_notation_compatible(start)[1]
@@ -234,22 +232,22 @@ def pieces_in_between(start,end,mode,board):
         end_column = turn_notation_compatible(end)[0]
         #vertical means it iterates through the same column, different row
         pieces_between = []
-        print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
+        #print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
         if end_row > start_row: #if it is moving downwards
             #turn_notation compatible reverses it. larger row = smaller row
-            print('TEST zz')
+            #print('TEST zz')
             step = 1 #if you +1 to the start_row, then the row decreases
         else:
             step = -1
-            print('TEST z')
-        print('TEST 1')
+            #print('TEST z')
+        #print('TEST 1')
             #iterate forwards
         for row in range(start_row + step,end_row ,step): #exclusive of starting square
-            print('TEST 12')
+            #print('TEST 12')
             square = chr(start_column+97) + str(8-row) #converts the square back into chess notation
             piece_at_square = check_piece_at_square(square,board)
             pieces_between.append(piece_at_square) #adds the piece at the square to the list
-            print('HI'+check_piece_at_square(square,board))
+            #print('HI'+check_piece_at_square(square,board))
         print(pieces_between)
         return pieces_between
     elif mode == 'horizontal':
