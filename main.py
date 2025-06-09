@@ -233,7 +233,7 @@ def pieces_in_between(start,end,mode,board):
         end_row = turn_notation_compatible(end)[1]
         end_column = turn_notation_compatible(end)[0]
         #vertical means it iterates through the same column, different row
-        pieces_between = []
+        pieces_between = ['Bus']
         print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
         if end_row > start_row: #if it is moving downwards
             #turn_notation compatible reverses it. larger row = smaller row
@@ -248,7 +248,7 @@ def pieces_in_between(start,end,mode,board):
             print('TEST 12')
             square = chr(start_column+97) + str(8-row) #converts the square back into chess notation
             piece_at_square = check_piece_at_square(square,board)
-            pieces_between.append(check_piece_at_square(square,board)) #adds the piece at the square to the list
+            pieces_between.append(piece_at_square) #adds the piece at the square to the list
             print('HI'+check_piece_at_square(square,board))
         print(pieces_between)
         return pieces_between
@@ -262,6 +262,6 @@ def turn_notation_compatible(square):
     row = int(square[1])
     row = abs(row - 8) #convert to board index 0-7
     column = (ord(square[0]) - 97)
-    print([column, row]) #TESTING ONLY! REMOVE AFTER FINISHED
+    #print([column, row]) #TESTING ONLY! REMOVE AFTER FINISHED
     return [column, row]
 main()
