@@ -104,7 +104,7 @@ def check_piece_at_square(square,board, mode='normal'):
         square = turn_notation_compatible(square)
     else:
         square = str(square)
-    return board[square[1]][square[0]] #returning the piece at the square by getting the row then the column
+    return board[int(square[1])][int(square[0])] #returning the piece at the square by getting the row then the column
 
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
