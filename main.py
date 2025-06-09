@@ -93,7 +93,6 @@ def move(colour,names,board):
         #not complete
 
         return update_board(start_square,end_square,board)
-        pass
     else: #conditions for black
         pass #work in progress
 
