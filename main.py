@@ -9,7 +9,7 @@ import os
 TASKS:
 - ADD try: except: and while: to prevent errors
 - ADD movement restrictions
-- ADD turn restrictions
+- ADD turn restrictions (can't move from the same square to the same square)
 '''
 #git stage *
 #git commit -m "message"
@@ -211,13 +211,15 @@ def pieces_in_between(start,end,mode,board):
     if mode == 'vertical': #checks the rows
         #code below turns chess square notation eg 'e4'
         #into row, column notation
-        start = str(ord(start[0]) - 97) + start[1] 
-        start_row = int(start[1])
-        start_row = abs(start_row - 8)
-        start_column = int(start[0])
-
-        for i in range():
-            pass
+        start_row = turn_notation_compatible()[1]
+        start_column = turn_notation_compatible()[0]
+        end_row = turn_notation_compatible()[1]
+        end_column = turn_notation_compatible()[0]
+        #vertical means it iterates through the same column, different row
+        pieces_between = []
+        for i in range(abs(end_row - start_row)): 
+            if end_row > start_row: #if moving upwards
+                pieces_between += check_piece_at_square()
     elif mode == 'horizontal':
         pass
     else: #mode = diagonal
