@@ -238,7 +238,7 @@ def pieces_in_between(start,end,mode,board):
             if end_row < start_row: #if moving upwards 
                 #IN compatible notation, if the second number is high, that means it is lower on the board.
                 print('TEST')
-                pieces_between += check_piece_at_square(int(str(start_row+1)+str(start_column)),board,'numnum')
+                pieces_between += check_piece_at_square(int(str(start_column)+str(start_row+1)),board,'numnum')
         print('INC')
         print(pieces_between)
     elif mode == 'horizontal':
