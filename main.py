@@ -35,7 +35,7 @@ def main():
 
     #TESTING
     print(turn_notation_compatible('c1'),turn_notation_compatible('c3'))
-
+    
 
 
 
