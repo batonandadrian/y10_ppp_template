@@ -34,8 +34,8 @@ def main():
 
 
     #TESTING
-    print(turn_notation_compatible('c1'),turn_notation_compatible('c3'))
     
+
 
 
 
@@ -235,7 +235,8 @@ def pieces_in_between(start,end,mode,board):
         print(f'END ROW = {end_row}, START ROW = {start_row}')
         for i in range(abs(end_row - start_row)): 
             print('CYLCE')
-            if end[1] > start[1]: #if moving upwards
+            if end_row < start_row: #if moving upwards 
+                #IN compatible notation, if the second number is high, that means it is lower on the board.
                 print('TEST')
                 pieces_between += check_piece_at_square(int(str(start_row+1)+str(start_column)),board,'numnum')
         print('INC')
