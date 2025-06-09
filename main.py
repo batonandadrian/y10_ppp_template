@@ -96,9 +96,10 @@ def move(colour,names,board):
     else: #conditions for black
         pass #work in progress
 
-def check_piece_at_square(square,board):
+def check_piece_at_square(square,board, mode='normal'):
     '''Returns the piece at the square when put into the format  "letternumber" '''
-    square = turn_notation_compatible(square)
+    if mode == 'normal': #not normal mode allows you to input in the format number number
+        square = turn_notation_compatible(square)
     return board[square[1]][square[0]] #returning the piece at the square by getting the row then the column
 
 def edit_square(square,piece,board):
