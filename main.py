@@ -109,7 +109,7 @@ def check_piece_at_square(square,board, mode='normal'):
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
     square = turn_notation_compatible(square)
-    board[square[1]][square[0]] = piece #changing the piece at the square
+    board[str(square)[1]][str(square)[0]] = piece #changing the piece at the square
     return board
 
 def setup_players():
