@@ -102,6 +102,8 @@ def check_piece_at_square(square,board, mode='normal'):
     '''Returns the piece at the square when put into the format  "letternumber" '''
     if mode == 'normal': #not normal mode allows you to input in the format number number
         square = turn_notation_compatible(square)
+    else:
+        square = str(square)
     return board[square[1]][square[0]] #returning the piece at the square by getting the row then the column
 
 def edit_square(square,piece,board):
@@ -223,9 +225,9 @@ def pieces_in_between(start,end,mode,board):
         print(f'END ROW = {end_row}, START ROW = {start_row}')
         for i in range(abs(end_row - start_row)): 
             print('CYLCE')
-            if end_row > start_row: #if moving upwards
+            if end[1] > start[1]: #if moving upwards
                 print('TEST')
-                pieces_between += check_piece_at_square((start_row+1,start_column).join(),board,'numnum')
+                pieces_between += check_piece_at_square(int(str(start_row+1)+str(start_column)),board,'numnum')
         print('INC')
         print(pieces_between)
     elif mode == 'horizontal':
