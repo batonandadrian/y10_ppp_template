@@ -238,9 +238,9 @@ def pieces_in_between(start,end,mode,board):
         if end_row > start_row: #if it is moving downwards
             #turn_notation compatible reverses it. larger row = smaller row
             print('TEST zz')
-            step = -1 #iterate backwards #MIGHT BE WRONG, step might be 1 when endrow > startrow
+            step = 1 #if you +1 to the start_row, then the row decreases
         else:
-            step = 1
+            step = -1
             print('TEST z')
         print('TEST 1')
             #iterate forwards
