@@ -90,6 +90,8 @@ def move(colour,names,board):
             if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                     conditions_met = True
+            elif check_piece_at_square(start_square,board) == '♖':
+                pieces_in_between(start_square,end_square,'vertical',board)
         #not complete
 
         return update_board(start_square,end_square,board)
@@ -167,11 +169,11 @@ def random_board(random_board):
     random.shuffle(white_shuffle)
     random.shuffle(black_shuffle)
 
-    random_board[0] = white_shuffle
-    random_board[-1] = black_shuffle
+    random_board[-1] = white_shuffle
+    random_board[0] = black_shuffle
 
-    random_board[1] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
-    random_board[-2] = ['♟'] * 8 #makes the 2nd row from the top pawns
+    random_board[-2] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
+    random_board[1] = ['♟'] * 8 #makes the 2nd row from the top pawns
     return random_board
 
 def menu():
@@ -212,15 +214,18 @@ def pieces_in_between(start,end,mode,board):
     if mode == 'vertical': #checks the rows
         #code below turns chess square notation eg 'e4'
         #into row, column notation
-        start_row = turn_notation_compatible()[1]
-        start_column = turn_notation_compatible()[0]
-        end_row = turn_notation_compatible()[1]
-        end_column = turn_notation_compatible()[0]
+        start_row = turn_notation_compatible(start)[1]
+        start_column = turn_notation_compatible(start)[0]
+        end_row = turn_notation_compatible(end)[1]
+        end_column = turn_notation_compatible(end)[0]
         #vertical means it iterates through the same column, different row
         pieces_between = []
         for i in range(abs(end_row - start_row)): 
+            print('CYLCE')
             if end_row > start_row: #if moving upwards
+                print('TEST')
                 pieces_between += check_piece_at_square((start_row+1,start_column).join(),board,'numnum')
+        print('INC')
         print(pieces_between)
     elif mode == 'horizontal':
         pass
