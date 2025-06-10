@@ -365,11 +365,11 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
 
 def turn_notation_compatible(square):
     '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
-    row = int(str(square)[1])
-    row = abs(row - 8) #convert to board index 0-7
-    column = (ord(str(square)[0]) - 97)
-    #print([column, row]) #TESTING ONLY! REMOVE AFTER FINISHED
-    return [column, row] #RETURNS INTEGERS IN A LIST
+    column = ord(square[0]) - ord('a')  #csonvert letter to index (0-7)
+    row = 8 - int(square[1])  # convert number to index (0-7)
+    
+    return [column, row]  # RETURN AS A LIST OF COLUMN AND ROW
+
 
 def reverse_notation(square):
     '''Turns nottion in row, column back into chess notation'''
