@@ -11,6 +11,14 @@ TASKS:
 - ADD movement restrictions
 - ADD turn restrictions (can't move from the same square to the same square)
 '''
+
+
+
+'''
+BUGS NEEDED TO FIX:
+for some reason, square is 1 digit ( when you move a rook horizontally)
+this crashes the program beacause square[1] is not a thing
+'''
 #git stage *
 #git commit -m "message"
 #git push
@@ -101,7 +109,8 @@ def move(colour,names,board):
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                     conditions_met = True
             elif check_piece_at_square(start_square,board) == '♖':
-                pieces_in_between(start_square,end_square,'vertical',board)
+                if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
+                    conditions_met = True
         #not complete
 
         return update_board(start_square,end_square,board)
@@ -112,8 +121,11 @@ def check_piece_at_square(square,board, mode='normal'):
     '''Returns the piece at the square when put into the format  "letternumber" '''
     if mode == 'normal': #not normal mode allows you to input in the format number number
         square = turn_notation_compatible(square)
+        print('NORMAL') #testing
     else:
         square = str(square)
+        print('NON NORMAL') #testing
+    print(f'{square}') #TESTING
     return board[int(square[1])][int(square[0])] #returning the piece at the square by getting the row then the column
 
 def edit_square(square,piece,board):
@@ -213,8 +225,26 @@ def knight_conditions(start,end,board,colour):
     pass
 
 def rook_conditions(start,end,board,colour):
-    pass
-
+    if start == end: #can't move to same squares
+        return 'Not supported'
+    elif start[0] == end[0]: #if column is the same
+        info = pieces_in_between(start,end,'vertical',board) #returns the pieces in between and the direction of travel (up down left right)
+        direction = info[1]
+        pieces = info[0]
+        if move_limits(pieces,direction,start,end,colour) == True:
+            return True
+        else:
+            return False
+    elif start[1] == end[1]: #if row is the same
+        info = pieces_in_between(start,end,'horizontal',board) #returns the pieces in between and the direction of travel (up down left right)
+        direction = info[1]
+        pieces = info[0]
+        if move_limits(pieces,direction,start,end,colour) == True: #if moving to the square is allowed
+            return True
+        else:
+            return False
+    else: #not moving straight
+        return 'Not supported'
 def bishop_conditions(start,end,board,colour):
     pass
 
@@ -223,6 +253,8 @@ def pieces_in_between(start,end,mode,board):
     Has 3 modes, vertical, horizontal, diagonal. 
     Uses the board to check (exclusive) of any piece in between other pieces
     '''
+
+
     if mode == 'vertical': #checks the rows
         #code below turns chess square notation eg 'e4'
         #into row, column notation
@@ -237,29 +269,112 @@ def pieces_in_between(start,end,mode,board):
             #turn_notation compatible reverses it. larger row = smaller row
             #print('TEST zz')
             step = 1 #if you +1 to the start_row, then the row decreases
+            direction = 'down'
         else:
             step = -1
+            direction = 'up'
             #print('TEST z')
         #print('TEST 1')
             #iterate forwards
         for row in range(start_row + step,end_row + step,step): #exclusive of starting square
             #print('TEST 12')
-            square = chr(start_column+97) + str(8-row) #converts the square back into chess notation
+            square = chr(start_column+97) + str(8-row) #converts the square back into chess notation, column is constant
             piece_at_square = check_piece_at_square(square,board)
             pieces_between.append(piece_at_square) #adds the piece at the square to the list
             #print('HI'+check_piece_at_square(square,board))
         print(pieces_between)
-        return pieces_between
+        return [pieces_between,direction]
+    
+
     elif mode == 'horizontal':
-        pass
+        #code below turns chess square notation eg 'e4'
+        #into row, column notation
+        start_row = turn_notation_compatible(start)[1]
+        start_column = turn_notation_compatible(start)[0]
+        end_row = turn_notation_compatible(end)[1]
+        end_column = turn_notation_compatible(end)[0]
+        #vertical means it iterates through the same column, different row
+        pieces_between = []
+        #print(f'END ROW = {end_row}, START ROW = {start_row}') #testing only
+        if end_column > start_column: #if it is moving to the right
+            #print('TEST zz')
+            step = 1 #if you +1 to the start_row, then the row decreases
+            direction = 'right'
+        else:
+            step = -1
+            direction = 'left'
+            #print('TEST z')
+        #print('TEST 1')
+            #iterate forwards
+        for column in range(start_column + step,end_column + step,step): #exclusive of starting square. inclusive of ending square
+            #print('TEST 12')
+            square = chr(start_column+97+column) + str(8-start_row) #converts the square back into chess notation. row is constant
+            piece_at_square = check_piece_at_square(square,board)
+            pieces_between.append(piece_at_square) #adds the piece at the square to the list
+            #print('HI'+check_piece_at_square(square,board))
+        print(pieces_between)
+        return [pieces_between,direction]
+    
+
     else: #mode = diagonal
         pass
 
+def move_limits(pieces_in_between, direction, start_square, end_square, colour):
+    '''Finds the furthest square to move to, based on the direction of movement and the square the user wants to move from and to.'''
+    white_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘','♙']
+    black_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞','♟']
+    if direction == 'right' or 'up':
+        step = 1
+    else:
+        step = -1
+    furthest = 0
+    start = turn_notation_compatible(start_square)
+    for square in pieces_in_between:
+        if square == '.': #if the square is empty, extend the furthest square possible
+            furthest += step
+        elif square in white_pieces: #if the piece is white at the square
+            if colour == 'White':
+                break #furthest it can move
+            else: #colour is black
+                furthest += step #furthest includes taking the white piece
+        else: #square in black pieces
+            if colour == 'Black':
+                furthest += step
+            else:
+                break
+    if direction == 'up' or direction == 'down': #add furthest to row.
+        furthest_square = int(str(start[0]) + str(start[1] + furthest))
+        print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)}') #TESTING ONLY
+        furthest_square = reverse_notation(furthest_square)
+        if int(end_square[1]) > furthest_square[1]:
+            print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
+        else:
+            return True
+    elif direction == 'right' or direction == 'left': #adds furthest to column
+        furthest_square = int(str(start[0] + furthest) + str(start[1]))
+        print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)}') #TESTING ONLY
+        furthest_square = reverse_notation(furthest_square)
+        if ord(end_square[0]) > ord(furthest_square[0]): #if the square the user wants to move to is further than what is possible
+            print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
+        else:
+            return True
+    # print(f'When you tried to move from {start_square} to {end_square}, the furthest you could move to was {furthest_square}') #TESTING
+    
+
+
+
 def turn_notation_compatible(square):
     '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
-    row = int(square[1])
+    row = int(str(square)[1])
     row = abs(row - 8) #convert to board index 0-7
-    column = (ord(square[0]) - 97)
+    column = (ord(str(square)[0]) - 97)
     #print([column, row]) #TESTING ONLY! REMOVE AFTER FINISHED
-    return [column, row]
+    return [column, row] #RETURNS INTEGERS IN A LIST
+
+def reverse_notation(square):
+    '''Turns nottion in row, column back into chess notation'''
+    print(f'SQUARE IS {square}') #TESTING ONLY
+    new_row = 8 - int(str(square)[1])
+    new_column = chr(int(str(square)[0]) + 97)
+    return [new_column,new_row]
 main()
