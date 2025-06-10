@@ -117,16 +117,14 @@ def move(colour,names,board):
     else: #conditions for black
         pass #work in progress
 
-def check_piece_at_square(square,board, mode='normal'):
-    '''Returns the piece at the square when put into the format  "letternumber" '''
-    if mode == 'normal': #not normal mode allows you to input in the format number number
-        square = turn_notation_compatible(square)
-        print('NORMAL') #testing
-    else:
-        square = str(square)
-        print('NON NORMAL') #testing
-    print(f'{square}') #TESTING
-    return board[int(square[1])][int(square[0])] #returning the piece at the square by getting the row then the column
+def check_piece_at_square(square, board):
+    '''Returns the piece at the square when put into the format "letternumber" '''
+    square_indices = turn_notation_compatible(square)  #convert square into usable notation
+
+    row = square_indices[1]    # row index
+    column = square_indices[0]  # column index
+
+    return board[row][column]  # returns the piece at row and column
 
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
