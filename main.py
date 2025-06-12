@@ -273,8 +273,10 @@ def pieces_in_between(start, end, mode, board):
     if mode == 'horizontal':
         if end_column > start_column: #if moving right
             step = 1
+            direction = 'right'
         else:
             step = -1 #if moving left
+            direction = 'left'
         
         for column in range(start_column + step, end_column, step):  # Exclusive of start and end
             square = chr(column + 97) + str(8 - start_row)  # Convert back to chess notation
@@ -282,10 +284,12 @@ def pieces_in_between(start, end, mode, board):
             pieces_between.append(piece_at_square)
 
     elif mode == 'vertical':
-        if end_row > start_row:
+        if end_row > start_row: #moving down
             step = 1
+            direction = 'down'
         else:
             step = -1
+            direction = 'up'
         
         for row in range(start_row + step, end_row + step, step):  # Exclusive of start 
             square = chr(start_column + 97) + str(8 - row)  # Convert back to chess notation
