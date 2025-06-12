@@ -108,12 +108,12 @@ def move(colour,names,board):
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                     conditions_met = True
                 else:
-                    print(Back.RED + f'The king could not move to {end_square}.' + Style.RESET_ALL)
+                    print(Back.RED + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
             elif check_piece_at_square(start_square,board) == '♖':
                 if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
                     conditions_met = True
                 else:
-                    print(Back.RED + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
+                    print(Back.RED + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
             # display_board(board)
         #not complete
 
