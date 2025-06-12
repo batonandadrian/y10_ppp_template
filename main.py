@@ -111,6 +111,7 @@ def move(colour,names,board):
             elif check_piece_at_square(start_square,board) == '♖':
                 if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
                     conditions_met = True
+            display_board(board)
         #not complete
 
         return update_board(start_square,end_square,board)
