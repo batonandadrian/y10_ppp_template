@@ -231,10 +231,17 @@ def knight_conditions(start,end,board,colour):
     pass
 
 def rook_conditions(start, end, board, colour):
+    white_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘', '♙']
+    black_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞', '♟']
     # Check if the start and end squares are the same
     if start == end:
         return False  # Can't move to the same square
-
+    if colour == 'White':
+        if check_piece_at_square(end,board) in white_pieces():
+            return False
+    else:
+        if check_piece_at_square(end,board) in black_pieces():
+            return False
     # Check for vertical movement
     if start[0] == end[0]:  # Same column
         pieces = pieces_in_between(start, end, 'vertical', board)
