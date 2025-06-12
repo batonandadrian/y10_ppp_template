@@ -386,6 +386,7 @@ def reverse_notation(square):
 def test(message):
     '''To make it clear that a print message is for testing purposes'''
     print(f'{message}\n')
+    return None
 main()
 
 
