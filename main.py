@@ -335,7 +335,7 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
             return False #move not legal
         else:
             return True
-    # print(f'When you tried to move from {start_square} to {end_square}, the furthest you could move to was {furthest_square}') #TESTING
+    print(f'When you tried to move from {start_square} to {end_square}, the furthest you could move to was {furthest_square}') #TESTING
     
 
 
