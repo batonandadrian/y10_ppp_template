@@ -372,7 +372,7 @@ def turn_notation_compatible(square):
     square = str(square)
     if len(square) != 2:
         print(f'Square is {len(square)} digits long, and the value is {square}')
-        raise ValueError
+        #raise ValueError
     
 
     '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
@@ -387,7 +387,7 @@ def reverse_notation(square):
     square = str(square)
     if len(square) != 2:
         print(f'Square is {len(square)} digits long, and the value is {square}')
-        raise ValueError
+        #raise ValueError
     print(f'SQUARE IS {square}') #TESTING ONLY
     new_row = 8 - int(str(square)[1])
     new_column = chr(int(str(square)[0]) + 97)
