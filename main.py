@@ -103,7 +103,7 @@ def move(colour,names,board):
             end_square = input(f'Where is your end square, {names[0]}?\n').lower()
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             # used to skip legal moves while it is not finished
-            conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
+            #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
@@ -123,8 +123,10 @@ def check_piece_at_square(square, board):
 
     row = square_indices[1]    # row index
     column = square_indices[0]  # column index
-
-    return board[row][column]  # returns the piece at row and column
+    try:
+        return board[row][column]  # returns the piece at row and column
+    except IndexError:
+        print(f'Row was {row}, column was {column}')
 
 def edit_square(square,piece,board):
     '''Changes the piece at the square when put into the format  "letternumber" '''
@@ -342,18 +344,23 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
                 break
     if direction == 'up' or direction == 'down': #add furthest to row.
         furthest_square = int(str(start[0]) + str(start[1] + furthest))
-        print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)}') #TESTING ONLY
+        print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)} and {reverse_notation(furthest_square)}') #TESTING ONLY
         furthest_square = reverse_notation(furthest_square)
         if int(end_square[1]) > furthest_square[1]:
             print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
+            return False
         else:
             return True
+        
     elif direction == 'right' or direction == 'left': #adds furthest to column
         furthest_square = int(str(start[0] + furthest) + str(start[1]))
-        print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)}') #TESTING ONLY
+        #FURTHEST SQUARE IS ALREADY NI COMPATIBLE FORM
+        print(f'TEST: {furthest_square} and {reverse_notation(furthest_square)}') #TESTING ONLY
         furthest_square = reverse_notation(furthest_square)
-        if ord(end_square[0]) > ord(furthest_square[0]): #if the square the user wants to move to is further than what is possible
+        print(type(furthest_square[0]),type(ord(end_square[0])))
+        if ord(end_square[0]) > furthest_square[0]: #if the square the user wants to move to is further than what is possible
             print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
+            return False #move not legal
         else:
             return True
     # print(f'When you tried to move from {start_square} to {end_square}, the furthest you could move to was {furthest_square}') #TESTING
@@ -362,8 +369,14 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
 
 
 def turn_notation_compatible(square):
+    square = str(square)
+    if len(square) != 2:
+        print(f'Square is {len(square)} digits long, and the value is {square}')
+        raise ValueError
+    
+
     '''Turns chess notation into row, columns so that it can be found on the chessboard using board[row][column]'''
-    column = ord(square[0]) - ord('a')  #csonvert letter to index (0-7)
+    column = ord(square[0]) - 97  #csonvert letter to index (0-7)
     row = 8 - int(square[1])  # convert number to index (0-7)
     
     return [column, row]  # RETURN AS A LIST OF COLUMN AND ROW
@@ -371,8 +384,15 @@ def turn_notation_compatible(square):
 
 def reverse_notation(square):
     '''Turns nottion in row, column back into chess notation'''
+    square = str(square)
+    if len(square) != 2:
+        print(f'Square is {len(square)} digits long, and the value is {square}')
+        raise ValueError
     print(f'SQUARE IS {square}') #TESTING ONLY
     new_row = 8 - int(str(square)[1])
     new_column = chr(int(str(square)[0]) + 97)
     return [new_column,new_row]
 main()
+
+
+
