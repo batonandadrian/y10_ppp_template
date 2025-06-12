@@ -321,6 +321,7 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
             return False
         else:
             return True
+            test('up or down returned true')
         
     elif direction == 'right' or direction == 'left': #adds furthest to column
         furthest_square = int(str(start[0] + furthest) + str(start[1])) #error on this line
@@ -335,6 +336,8 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
             return False #move not legal
         else:
             return True
+            test('Right or left, returned true')
+
     print(f'When you tried to move from {start_square} to {end_square}, the furthest you could move to was {furthest_square}') #TESTING
     
 
@@ -368,6 +371,10 @@ def reverse_notation(square):
     new_row = 8 - int(str(square)[1])
     new_column = chr(int(str(square)[0]) + 97)
     return [new_column,new_row]
+
+def test(message):
+    '''To make it clear that a print message is for testing purposes'''
+    print(f'{message}\n')
 main()
 
 
