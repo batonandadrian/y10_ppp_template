@@ -16,7 +16,7 @@ TASKS:
 
 '''
 BUGS NEEDED TO FIX:
-all moves are legal?
+capture own pieces
 '''
 #git stage *
 #git commit -m "message"
@@ -42,7 +42,7 @@ def main():
 
     #TESTING
     
-
+    
 
 
 
@@ -237,10 +237,10 @@ def rook_conditions(start, end, board, colour):
     if start == end:
         return False  # Can't move to the same square
     if colour == 'White':
-        if check_piece_at_square(end,board) in white_pieces():
+        if check_piece_at_square(end,board) in white_pieces:
             return False
     else:
-        if check_piece_at_square(end,board) in black_pieces():
+        if check_piece_at_square(end,board) in black_pieces:
             return False
     # Check for vertical movement
     if start[0] == end[0]:  # Same column
