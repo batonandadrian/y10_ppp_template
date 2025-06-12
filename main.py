@@ -62,7 +62,7 @@ def main():
         start_turn(colour, names, board)
         display_board(board) #not going to work, needs an update_board() function
         colour = turn(colour)
-
+        
 def clear():
     '''Clearing the screen'''
     os.system('clear')
