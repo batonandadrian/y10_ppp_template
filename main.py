@@ -16,8 +16,7 @@ TASKS:
 
 '''
 BUGS NEEDED TO FIX:
-for some reason, square is 1 digit ( when you move a rook horizontally)
-this crashes the program beacause square[1] is not a thing
+all moves are legal?
 '''
 #git stage *
 #git commit -m "message"
@@ -238,6 +237,7 @@ def rook_conditions(start, end, board, colour):
         for piece in pieces:
             if piece != '.': #if the square is not empty
                 return False  # Blocked by another piece
+            
         # only runs if return False doesn't run
         return True  # Valid move
 
