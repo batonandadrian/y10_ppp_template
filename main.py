@@ -357,9 +357,9 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
         #FURTHEST SQUARE IS ALREADY NI COMPATIBLE FORM
         print(f'TEST: {furthest_square} and {reverse_notation(furthest_square)}') #TESTING ONLY
         furthest_square = reverse_notation(furthest_square)
-        print(type(furthest_square[0]),type(ord(end_square[0])))
+        print(type(furthest_square[0]),type(end_square[0]))
         print(end_square)
-        if (end_square[0] > furthest_square[0]: #if the square the user wants to move to is further than what is possible
+        if end_square[0] > furthest_square[0]: #if the square the user wants to move to is further than what is possible
             print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
             return False #move not legal
         else:
