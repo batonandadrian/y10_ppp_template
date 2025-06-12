@@ -237,9 +237,12 @@ def rook_conditions(start, end, board, colour):
         for piece in pieces:
             if piece != '.': #if the square is not empty
                 return False  # Blocked by another piece
-            
-        # only runs if return False doesn't run
-        return True  # Valid move
+        direction = info[1]
+        pieces = info[0]
+        if move_limits(pieces,direction,start,end,colour) == True:
+            return True
+        else:
+            return False
 
     # Check for horizontal movement
     elif start[1] == end[1]:  # Same row
@@ -249,8 +252,12 @@ def rook_conditions(start, end, board, colour):
         for piece in info:
             if piece != '.':
                 return False  # Blocked by another piece
-        # only runs if return False doesn't run
-        return True  # Valid move
+        direction = info[1]
+        pieces = info[0]
+        if move_limits(pieces,direction,start,end,colour) == True:
+            return True
+        else:
+            return False
     
     return False  #invalid move (not straight)
 
@@ -286,7 +293,7 @@ def pieces_in_between(start, end, mode, board):
             pieces_between.append(piece_at_square)
     else: #mode = diagonal
         pass
-    return pieces_between  #return pieces in between
+    return [pieces_between,direction]  #return pieces in between
     
 
 def move_limits(pieces_in_between, direction, start_square, end_square, colour):
