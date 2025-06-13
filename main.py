@@ -16,12 +16,15 @@ TASKS:
 
 '''
 BUGS NEEDED TO FIX:
-capture own pieces
+fix try and except for user inputs
 '''
 #git stage *
 #git commit -m "message"
 #git push
 
+#GLOBAL
+white_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
+black_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
 
 def main():
     '''Opens up the menu'''
@@ -102,7 +105,7 @@ def move(colour,names,board):
             end_square = input(f'Where is your end square, {names[0]}?\n').lower()
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             # used to skip legal moves while it is not finished
-            conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
+            #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
@@ -116,12 +119,18 @@ def move(colour,names,board):
                 else:
                     print(Back.RED + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
+            elif check_piece_at_square(start_square,board) == '♙':
+                if pawn_conditions(start_square,end_square,board,colour) == True:
+                    conditions_met = True
+                else:
+                    print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
+                
             # display_board(board)
         #not complete
 
         return update_board(start_square,end_square,board)
     else: #conditions for black
-        pass #work in progress
+        pass
 
 def check_piece_at_square(square, board):
     '''Returns the piece at the square when put into the format "letternumber" '''
@@ -225,19 +234,70 @@ def queen_conditions(start,end,board,colour):
     pass
 
 def pawn_conditions(start,end,board,colour):
-    pass
+    if start == end:
+        test('Start is same as end')
+        return False #can't move to same square
+    
+    #cant capture own pieces
+    if colour == 'White':
+        test('Pawn is white')
+        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
+            test('self capture')
+            return False
+    
+        elif start[0] == end[0]: #if columns are the same
+            test('column is the same')
+            pieces = pieces_in_between(start,end,'vertical',board)
+            empty_squares_only = True
+            for square in pieces:
+                test(square)
+                if square not in ['.','',' ', None]: #if squares aren't empty or have nothing in between
+                    empty_squares_only = False #checks if there are pieces in between
+                    test(square)
+                    test('pieces in between')
+                    return False
+            if empty_squares_only:
+                test('squares between are empty')
+                if int(start[1]) - int(end[1]) == 2: #if pawn trying to move 2 spaces
+                    if start[1] == '2': #if pawns are on 2nd row
+                        return True #allows 2 squares move on first move of the pawn
+                    else:
+                        return False
+        elif abs(ord(start[0]) - ord(end[0])) == 1: #if difference between columns is 1
+            test('column difference = 1')
+            if check_piece_at_square(end,board) in black_pieces: #if its a capture of a black piece
+                if int(end[1]) - int(start[1]) == 1: #if row difference is 1 and its a capture
+                    return True
+                elif True: #something for EN PASSANT HERE
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        
+        else: #movement not possible
+            test('movement not possible')
+            return False
+            
+
+
+
+    else:
+        #paste white code into here, modify it slightly to fit the black code
+        if check_piece_at_square(end,board) in black_pieces:
+            return False
+    
+    
 
 def knight_conditions(start,end,board,colour):
     pass
 
 def rook_conditions(start, end, board, colour):
-    white_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘', '♙']
-    black_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞', '♟']
     # Check if the start and end squares are the same
     if start == end:
         return False  # Can't move to the same square
     if colour == 'White':
-        if check_piece_at_square(end,board) in white_pieces:
+        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
             return False
     else:
         if check_piece_at_square(end,board) in black_pieces:
@@ -250,8 +310,8 @@ def rook_conditions(start, end, board, colour):
         for piece in pieces:
             if piece != '.': #if the square is not empty
                 return False  # Blocked by another piece
-        direction = info[1]
-        pieces = info[0]
+        direction = pieces[1]
+        pieces = pieces[0]
         if move_limits(pieces,direction,start,end,colour) == True:
             return True
         else:
@@ -398,7 +458,7 @@ def reverse_notation(square):
 
 def test(message):
     '''To make it clear that a print message is for testing purposes'''
-    print(f'{message}\n')
+    print(Fore.MAGENTA + f'{message}\n')
     return None
 main()
 
