@@ -247,7 +247,7 @@ def pawn_conditions(start,end,board,colour):
     
         elif start[0] == end[0]: #if columns are the same
             test('column is the same')
-            pieces = pieces_in_between(start,end,'vertical',board)
+            pieces = pieces_in_between(start,end,'vertical',board) #THIS LINE IS WRONG
             empty_squares_only = True
             for square in pieces:
                 test(square)
