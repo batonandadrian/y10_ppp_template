@@ -253,7 +253,7 @@ def pawn_conditions(start,end,board,colour):
                 test(square)
                 if square not in ['.','',' ', None] or square == []: #if squares aren't empty or have nothing in between
                     empty_squares_only = False #checks if there are pieces in between
-                    test(square)
+                    test(square, square not in ['.','',' ', None] or square == [])
                     test('pieces in between')
                     return False
             if empty_squares_only:
