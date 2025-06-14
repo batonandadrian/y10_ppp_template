@@ -361,14 +361,13 @@ def rook_conditions(start, end, board, colour):
             return False
     # Check for vertical movement
     if start[0] == end[0]:  # Same column
-        pieces = pieces_in_between(start, end, 'vertical', board)
+        pieces, direction = pieces_in_between(start, end, 'vertical', board)
         
         # Ensure all pieces between the start and end are empty
         for piece in pieces:
             if piece != '.': #if the square is not empty
                 return False  # Blocked by another piece
-        direction = pieces[1]
-        pieces = pieces[0]
+
         if move_limits(pieces,direction,start,end,colour) == True:
             return True
         else:
