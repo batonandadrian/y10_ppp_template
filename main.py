@@ -124,6 +124,11 @@ def move(colour,names,board):
                     conditions_met = True
                 else:
                     print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
+            elif check_piece_at_square(start_square,board) == '♙':
+                if pawn_conditions(start_square,end_square,board,colour) == True:
+                    conditions_met = True
+                else:
+                    print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
                 
             # display_board(board)
         #not complete
@@ -318,7 +323,28 @@ def pawn_conditions(start,end,board,colour):
 
 
 def knight_conditions(start,end,board,colour):
-    pass
+    if start == end:
+        return False  # Can't move to the same square
+    if colour == 'White':
+        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
+            return False
+    else:
+        if check_piece_at_square(end,board) in black_pieces:
+            return False
+    start_column, start_row = start #multi variable assignment
+    end_column, end_row = end
+    if abs(ord(end_column) - ord(start_column)) == 1: #Case 1:Forward and backward knight moves
+        if abs(end_row - start_row) == 2: #Should be 2 if it moves up and down L shape
+            return True
+        else:
+            return False
+    elif abs(ord(end_column) - ord(start_column)) == 2: #Case 2: Left right knight moves
+        if abs(end_row - start_row) == 1: #Should be 1 if it moves sideways L shape
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def rook_conditions(start, end, board, colour):
     # Check if the start and end squares are the same
