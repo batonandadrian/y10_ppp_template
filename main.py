@@ -452,7 +452,7 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
             else:
                 break
     if direction == 'up' or direction == 'down': #add furthest to row.
-        furthest_square = int(str(start[0] + str(start[1] + furthest))) #error 
+        furthest_square = int(str(start[0]) + str(start[1] + furthest)) #error 
         print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)} and {reverse_notation(furthest_square)}') #TESTING ONLY
         furthest_square = reverse_notation(furthest_square)
         if int(end_square[1]) > furthest_square[1]:
