@@ -291,7 +291,7 @@ def pawn_conditions(start,end,board,colour):
 
         elif start[0] == end[0]:
             test('column is the same')
-            pieces = pieces_in_between(start,end,'vertical',board)
+            pieces, _ = pieces_in_between(start,end,'vertical',board)
             print(pieces)
             empty_squares_only = True
             for square in pieces:
