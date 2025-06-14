@@ -223,9 +223,9 @@ def random_board(random_board):
 
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
+    cool_coloured_text('/mhello/cnew')
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     while menu_result not in ['1', '2']:
-        print('TEST')
         #clear() TESTING ONLY! REMOVE # WHEN COMPLETE
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
@@ -512,7 +512,33 @@ def reverse_notation(square):
 def test(message):
     '''To make it clear that a print message is for testing purposes'''
     print(Fore.MAGENTA + f'{message}\n' + Style.RESET_ALL)
+
+
+def cool_coloured_text(text):
+    '''Format: /colourletters(colour)letters'''
+    final_text = ''
+    colour = ''
+    for letter_index in range(len(text)):
+        if text[letter_index] == '/':
+            colour = text[letter_index+1]
+        
+        if text[letter_index-1] == '/':
+             continue
+        else:
+            colour = text[letter_index - 1]
+            if colour == 'm': #magenta
+                final_text += Fore.MAGENTA + text[letter_index] + Style.RESET_ALL
+            elif colour == 'b': #blue
+                final_text += Fore.BLUE + text[letter_index] + Style.RESET_ALL
+            elif colour == 'y': #yellow
+                final_text += Fore.YELLOW + text[letter_index] + Style.RESET_ALL 
+            elif colour == 'c': #cyan
+                final_text += Fore.CYAN + text[letter_index] + Style.RESET_ALL  
+            elif colour == 'g': #green
+                final_text += Fore.GREEN + text[letter_index] + Style.RESET_ALL
+            elif colour == 'r': #red
+                final_text += Fore.RED + text[letter_index] + Style.RESET_ALL
+    print(final_text)
+
+
 main()
-
-
-
