@@ -213,11 +213,11 @@ def random_board(random_board):
     random.shuffle(white_shuffle)
     random.shuffle(black_shuffle)
 
-    random_board[-1] = white_shuffle
-    random_board[0] = black_shuffle
+    random_board[0] = white_shuffle
+    random_board[-1] = black_shuffle
 
-    random_board[-2] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
-    random_board[1] = ['♟'] * 8 #makes the 2nd row from the top pawns
+    random_board[1] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
+    random_board[-2] = ['♟'] * 8 #makes the 2nd row from the top pawns
     return random_board
 
 def menu():
