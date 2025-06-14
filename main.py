@@ -223,7 +223,7 @@ def random_board(random_board):
 
 def menu():
     '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
-    cool_coloured_text('/mhello/cnew')
+    #cool_coloured_text('/mhello/cnew')
     menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     while menu_result not in ['1', '2']:
         #clear() TESTING ONLY! REMOVE # WHEN COMPLETE
