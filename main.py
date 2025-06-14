@@ -251,13 +251,13 @@ def pawn_conditions(start,end,board,colour):
             empty_squares_only = True
             for square in pieces:
                 test(square)
-                if square not in ['.','',' ', None]:  # <-- FIXED THIS LINE
+                if square not in ['.','',' ', None]:  
                     empty_squares_only = False
                     test('pieces in between')
                     return False
             if empty_squares_only:
                 test('squares between are empty')
-                if int(end[1]) - int(start[1]) == 2:  # <-- FIXED DIRECTION
+                if int(end[1]) - int(start[1]) == 2:
                     if start[1] == '2':  # White pawns start from rank 2
                         return True
                     else:
@@ -265,9 +265,9 @@ def pawn_conditions(start,end,board,colour):
                 elif int(end[1]) - int(start[1]) == 1:  # normal 1-square move
                     return True
 
-        elif abs(ord(start[0]) - ord(end[0])) == 1:
+        elif abs(ord(start[0]) - ord(end[0])) == 1: #captures have 1 column difference
             test('column difference = 1')
-            if check_piece_at_square(end,board) in black_pieces:
+            if check_piece_at_square(end,board) in black_pieces: #if end square is black pieces, and column diff is 1 then it is a capture
                 if int(end[1]) - int(start[1]) == 1:
                     return True
             # TODO: EN PASSANT
@@ -307,7 +307,7 @@ def pawn_conditions(start,end,board,colour):
         elif abs(ord(start[0]) - ord(end[0])) == 1:
             test('column difference = 1')
             if check_piece_at_square(end,board) in white_pieces:
-                if int(start[1]) - int(end[1]) == 1:
+                if int(start[1]) - int(end[1]) == 1: 
                     return True
             # TODO: EN PASSANT
             return False
