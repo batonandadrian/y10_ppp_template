@@ -463,7 +463,7 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
             test('up or down returned true')
         
     elif direction == 'right' or direction == 'left': #adds furthest to column
-        furthest_square = int(str(start[0]) + furthest) + str(start[1])) #error on this line
+        furthest_square = int(str(start[0] + furthest) + str(start[1])) #error on this line
         #FURTHEST SQUARE IS ALREADY NI COMPATIBLE FORM
         print(f'Test {furthest_square}')
         print(f'TEST: {furthest_square} and {reverse_notation(furthest_square)}') #TESTING ONLY
