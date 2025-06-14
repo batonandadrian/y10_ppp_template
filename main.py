@@ -103,6 +103,7 @@ def move(colour,names,board):
         while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
             start_square = input(f'Where is your starting square, {names[0]}?\n').lower()
             end_square = input(f'Where is your end square, {names[0]}?\n').lower()
+            test(check_piece_at_square(start_square,board))
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             # used to skip legal moves while it is not finished
             #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
@@ -125,10 +126,10 @@ def move(colour,names,board):
                 else:
                     print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
             elif check_piece_at_square(start_square,board) == '♞':
-                if pawn_conditions(start_square,end_square,board,colour) == True:
+                if knight_conditions(start_square,end_square,board,colour) == True:
                     conditions_met = True
                 else:
-                    print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
+                    print(Back.RED + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
                 
             # display_board(board)
         #not complete
