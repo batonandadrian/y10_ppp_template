@@ -232,63 +232,90 @@ def queen_conditions(start,end,board,colour):
     if rook_conditions() or bishop_conditions():
         return True
     pass
-
 def pawn_conditions(start,end,board,colour):
     if start == end:
         test('Start is same as end')
         return False #can't move to same square
-    
+
     #cant capture own pieces
     if colour == 'White':
         test('Pawn is white')
-        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
+        if check_piece_at_square(end,board) in white_pieces:
             test('self capture')
             return False
-    
-        elif start[0] == end[0]: #if columns are the same
+
+        elif start[0] == end[0]: #same column
             test('column is the same')
-            pieces = pieces_in_between(start,end,'vertical',board) #THIS LINE IS WRONG
+            pieces, _ = pieces_in_between(start,end,'vertical',board) #gets piecesinbetween[0]
             print(pieces)
             empty_squares_only = True
             for square in pieces:
                 test(square)
-                if square not in ['.','',' ', None] and square == []: #if squares aren't empty and have nothing in between
-                    empty_squares_only = False #checks if there are pieces in between
-                    test(square + ([square not in ['.','',' ', None] or square != []]))
+                if square not in ['.','',' ', None]:  # <-- FIXED THIS LINE
+                    empty_squares_only = False
                     test('pieces in between')
                     return False
             if empty_squares_only:
                 test('squares between are empty')
-                if int(start[1]) - int(end[1]) == 2: #if pawn trying to move 2 spaces
-                    if start[1] == '2': #if pawns are on 2nd row
-                        return True #allows 2 squares move on first move of the pawn
+                if int(end[1]) - int(start[1]) == 2:  # <-- FIXED DIRECTION
+                    if start[1] == '2':  # White pawns start from rank 2
+                        return True
                     else:
                         return False
-        elif abs(ord(start[0]) - ord(end[0])) == 1: #if difference between columns is 1
+                elif int(end[1]) - int(start[1]) == 1:  # normal 1-square move
+                    return True
+
+        elif abs(ord(start[0]) - ord(end[0])) == 1:
             test('column difference = 1')
-            if check_piece_at_square(end,board) in black_pieces: #if its a capture of a black piece
-                if int(end[1]) - int(start[1]) == 1: #if row difference is 1 and its a capture
+            if check_piece_at_square(end,board) in black_pieces:
+                if int(end[1]) - int(start[1]) == 1:
                     return True
-                elif True: #something for EN PASSANT HERE
-                    return True
-                else:
-                    return False
-            else:
-                return False
-        
-        else: #movement not possible
+            # TODO: EN PASSANT
+            return False
+
+        else:
             test('movement not possible')
             return False
-            
 
-
-
-    else:
-        #paste white code into here, modify it slightly to fit the black code
+    else: # Black pawn
+        test('Pawn is black')
         if check_piece_at_square(end,board) in black_pieces:
+            test('self capture')
             return False
-    
-    
+
+        elif start[0] == end[0]:
+            test('column is the same')
+            pieces = pieces_in_between(start,end,'vertical',board)
+            print(pieces)
+            empty_squares_only = True
+            for square in pieces:
+                test(square)
+                if square not in ['.','',' ', None]:  # <-- same fix
+                    empty_squares_only = False
+                    test('pieces in between')
+                    return False
+            if empty_squares_only:
+                test('squares between are empty')
+                if int(start[1]) - int(end[1]) == 2:  # <-- reverse for black
+                    if start[1] == '7':
+                        return True
+                    else:
+                        return False
+                elif int(start[1]) - int(end[1]) == 1:  # normal 1-square move
+                    return True
+
+        elif abs(ord(start[0]) - ord(end[0])) == 1:
+            test('column difference = 1')
+            if check_piece_at_square(end,board) in white_pieces:
+                if int(start[1]) - int(end[1]) == 1:
+                    return True
+            # TODO: EN PASSANT
+            return False
+
+        else:
+            test('movement not possible')
+            return False
+
 
 def knight_conditions(start,end,board,colour):
     pass
@@ -378,7 +405,7 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
     '''Finds the furthest square to move to, based on the direction of movement and the square the user wants to move from and to.'''
     white_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘','♙']
     black_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞','♟']
-    if direction == 'right' or 'up':
+    if direction in ['right', 'up']:
         step = 1
     else:
         step = -1
@@ -459,7 +486,7 @@ def reverse_notation(square):
 
 def test(message):
     '''To make it clear that a print message is for testing purposes'''
-    print(Fore.MAGENTA + f'{message}\n')
+    print(Fore.MAGENTA + f'{message}\n' + Style.RESET_ALL)
     return None
 main()
 
