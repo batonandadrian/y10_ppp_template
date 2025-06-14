@@ -375,14 +375,13 @@ def rook_conditions(start, end, board, colour):
 
     # Check for horizontal movement
     elif start[1] == end[1]:  # Same row
-        info = pieces_in_between(start, end, 'horizontal', board)
+        pieces, direction = pieces_in_between(start, end, 'horizontal', board)
         
         # Ensure all pieces between the start and end are empty
-        for piece in info:
+        for piece in pieces:
             if piece != '.':
                 return False  # Blocked by another piece
-        direction = info[1]
-        pieces = info[0]
+            
         if move_limits(pieces,direction,start,end,colour) == True:
             return True
         else:
