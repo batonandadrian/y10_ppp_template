@@ -107,24 +107,24 @@ def move(colour,names,board):
             # used to skip legal moves while it is not finished
             #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-            if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
+            if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                     conditions_met = True
                 else:
                     print(Back.RED + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
-            elif check_piece_at_square(start_square,board) == '♖':
+            elif check_piece_at_square(start_square,board) == '♜':
                 if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
                     conditions_met = True
                 else:
                     print(Back.RED + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
-            elif check_piece_at_square(start_square,board) == '♙':
+            elif check_piece_at_square(start_square,board) == '♟':
                 if pawn_conditions(start_square,end_square,board,colour) == True:
                     conditions_met = True
                 else:
                     print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
-            elif check_piece_at_square(start_square,board) == '♙':
+            elif check_piece_at_square(start_square,board) == '♞':
                 if pawn_conditions(start_square,end_square,board,colour) == True:
                     conditions_met = True
                 else:
