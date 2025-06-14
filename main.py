@@ -334,6 +334,8 @@ def knight_conditions(start,end,board,colour):
             return False
     start_column, start_row = start #multi variable assignment
     end_column, end_row = end
+    start_row, end_row = int(start_row), int(end_row)
+    
     if abs(ord(end_column) - ord(start_column)) == 1: #Case 1:Forward and backward knight moves
         if abs(end_row - start_row) == 2: #Should be 2 if it moves up and down L shape
             return True
