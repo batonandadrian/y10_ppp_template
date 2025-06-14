@@ -487,7 +487,6 @@ def reverse_notation(square):
 def test(message):
     '''To make it clear that a print message is for testing purposes'''
     print(Fore.MAGENTA + f'{message}\n' + Style.RESET_ALL)
-    return None
 main()
 
 
