@@ -175,7 +175,8 @@ def move(colour,names,board):
                     conditions_met = False
                     display_board(board)
                 
-
+            if opposite_turn_movement(start_square,board,colour) == False:
+                conditions_met = False
 
 
         return update_board(start_square,end_square,board)
@@ -247,7 +248,8 @@ def move(colour,names,board):
                     conditions_met = False
                     display_board(board)
             
-            
+            if opposite_turn_movement(start_square,board,colour) == False:
+                conditions_met = False
 
         return update_board(start_square,end_square,board)
 
@@ -367,6 +369,12 @@ def no_move_check(start,end):
 
 def opposite_turn_movement(start,board,colour):
     '''Returns false if a piece is selected on the opponent's turn'''
+    if check_piece_at_square(start,board) in black_pieces and colour == 'White': #selecting black piece during white turn
+        return False
+    elif check_piece_at_square(start,board) in white_pieces and colour == 'Black': #selecting white piece during black turn
+        return False
+    else:
+        return False
 def king_conditions(start,end,board,colour):
     pass
 
