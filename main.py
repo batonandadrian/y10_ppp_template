@@ -136,13 +136,19 @@ def move(colour,names,board):
                     print(Back.RED + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
 
-            elif check_piece_at_square(start_square,board) == '♞':
-                if knight_conditions(start_square,end_square,board,colour) == True:
+            elif check_piece_at_square(start_square,board) == '♝':
+                if bishop_conditions(start_square,end_square,board,colour) == True:
                     conditions_met = True
                 else:
-                    print(Back.RED + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
+                    print(Back.RED + Fore.BLACK + f'The bishop could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
-                    
+
+            elif check_piece_at_square(start_square,board) == '♛':
+                if queen_conditions(start_square,end_square,board,colour) == True:
+                    conditions_met = True
+                else:
+                    print(Back.RED + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
+                    display_board(board)
             # display_board(board)
         #not complete
 
