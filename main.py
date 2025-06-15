@@ -474,6 +474,9 @@ def bishop_conditions(start,end,board,colour):
 
     possible_end_squares = squares_in_board(possible_end_squares) #only gets the squares inside the board
     test(possible_end_squares)
+    for index in range(len(possible_end_squares)):
+        possible_end_squares[index] = possible_end_squares[index][0] + str(possible_end_squares[index][1])
+    test(possible_end_squares)
     if end in possible_end_squares: #if the end square is in the list of all possible squares
         for piece in pieces:
             if piece != '.':
