@@ -420,13 +420,13 @@ def bishop_conditions(start,end,board,colour):
     direction = pieces_in_between(start,end,'diagonal',board)
     pieces = []
 
-    start_column, start_row = int(turn_notation_compatible(start)[0]), int(turn_notation_compatible(start)[1])
+    start_column, start_row = turn_notation_compatible(start)
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
     #case 1: diagonal, up, right
     for _ in range(8): #since bishops can move furthest, 8 squares in a specific direction
-        start_column = str(start_column + 1) #right
-        start_row = str(start_row - 1) #up #inverted row scale, high notation row = low row
+        start_column = str(int(start_column) + 1) #right
+        start_row = str(int(start_row) - 1) #up #inverted row scale, high notation row = low row
         current_square = start_column + start_row
         possible_end_squares.append(reverse_notation(current_square)) #adds the square 1 up and 1 right of the previous
         if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
@@ -434,8 +434,8 @@ def bishop_conditions(start,end,board,colour):
 
     #case 2: diagonal, up, left
     for _ in range(8): 
-        start_column = str(start_column - 1) #left
-        start_row = str(start_row - 1) #up   #inverted row scale, high notation row = low row
+        start_column = str(int(start_column) - 1) #left
+        start_row = str(int(start_row) - 1) #up   #inverted row scale, high notation row = low row
         current_square = start_column + start_row
         possible_end_squares.append(reverse_notation(current_square)) 
         if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
@@ -443,8 +443,8 @@ def bishop_conditions(start,end,board,colour):
 
     #case 3: diagonal, down, right
     for _ in range(8): 
-        start_column = str(start_column + 1) #right
-        start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
+        start_column = str(int(start_column) + 1) #right
+        start_row = str(int(start_row) + 1) #down  #inverted row scale, high notation row = low row
         current_square = start_column + start_row
         possible_end_squares.append(reverse_notation(current_square)) 
         if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
@@ -452,8 +452,8 @@ def bishop_conditions(start,end,board,colour):
 
     #case 4: diagonal, down, left
     for _ in range(8): 
-        start_column = str(start_column - 1) #left
-        start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
+        start_column = str(int(start_column) - 1) #left
+        start_row = str(int(start_row) + 1) #down  #inverted row scale, high notation row = low row
         current_square = start_column + start_row
         possible_end_squares.append(reverse_notation(current_square))
         if direction == 'bottomleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
