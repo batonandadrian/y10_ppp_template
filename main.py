@@ -439,7 +439,7 @@ def bishop_conditions(start,end,board,colour):
             possible_end_squares.append(reverse_notation(current_square))  #adds the square 1 up and 1 right of the previous
             if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
                 pieces.append(check_piece_at_square(reverse_notation(current_square)))
-
+    
     #case 2: diagonal, up, left
     for _ in range(8): 
         start_column = str(int(start_column) - 1) #left
