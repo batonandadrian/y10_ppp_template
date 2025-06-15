@@ -10,7 +10,7 @@ TASKS:
 - ALL Chess Features
   - EN PASSANT
   - CASTLING (CHECK pieces in between, move rook 2 squares and king 2 squares)
-- ADD turns (white move, black move) CORRECTLY [X]
+- ADD turns (white move, black move) CORRECTLY [V]
 - Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
 - Possibly Checkmate
 - Illegal move error messages
