@@ -8,6 +8,8 @@ import os
 '''
 TASKS:
 - ADD turns (white move, black move) CORRECTLY
+- Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
+- Possibly Checkmate
 - INSTRUCTIONS, tutorial boards
 - IMPROVE interface (icons, emojis, board outline?)
 - IMPROVE quality (having better print messages, showing which piece you want to move when you get the square of it)
