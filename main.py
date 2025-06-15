@@ -490,10 +490,13 @@ def rook_conditions(start, end, board, colour):
         pieces, direction = pieces_in_between(start, end, 'vertical', board)
         
         # Ensure all pieces between the start and end are empty
-        for piece in pieces:
-            if piece != '.': #if the square is not empty
-                return False  # Blocked by another piece
-
+        if len(pieces) != 1: #len 1 needs special case
+            for piece in pieces:
+                if piece != '.': #if the square is not empty
+                    return False  # Blocked by another piece
+        else:
+            if check_piece_at_square(end,board) == '.':
+                return True
         if move_limits(pieces,direction,start,end,colour) == True:
             return True
         else:
@@ -504,9 +507,13 @@ def rook_conditions(start, end, board, colour):
         pieces, direction = pieces_in_between(start, end, 'horizontal', board)
         
         # Ensure all pieces between the start and end are empty
-        for piece in pieces:
-            if piece != '.':
-                return False  # Blocked by another piece
+        if len(pieces) != 1: #len 1 needs special case
+            for piece in pieces:
+                if piece != '.': #if the square is not empty
+                    return False  # Blocked by another piece
+        else:
+            if check_piece_at_square(end,board) == '.':
+                return True
             
         if move_limits(pieces,direction,start,end,colour) == True:
             return True
