@@ -426,6 +426,7 @@ def bishop_conditions(start,end,board,colour):
     pieces = []
 
     start_column, start_row = turn_notation_compatible(start)
+    start_column_int, start_row_int = int(start_column), int(start_row)
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
     #case 1: diagonal, up, right
@@ -440,32 +441,30 @@ def bishop_conditions(start,end,board,colour):
             if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
                 pieces.append(check_piece_at_square(reverse_notation(current_square)))
     
-    #case 2: diagonal, up, left
-    for _ in range(8): 
-        start_column = str(int(start_column) - 1) #left
-        test(f'case 2 {start_column}')
-        start_row = str(int(start_row) - 1) #up   #inverted row scale, high notation row = low row
-        test(f'case 2 {start_row}')
-        current_square = start_column + start_row
-        
-        if len(current_square) == 2: #causes error if len is not 2 (meaning the indexes are positive, negative like 1-4)
+        # Case 2: diagonal, up, left
+    temp_column = start_column_int
+    temp_row = start_row_int
+    for _ in range(8):
+        temp_column -= 1  # left
+        temp_row -= 1     # up (inverted row scale)
+        current_square = str(temp_column) + str(temp_row)
+        if len(current_square) == 2:  # This now works correctly because temp_row is int, no negative sign
             test(f'case 2 {reverse_notation(current_square)}')
-            possible_end_squares.append(reverse_notation(current_square)) 
-            if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+            possible_end_squares.append(reverse_notation(current_square))
+            if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square):
                 pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
-    #case 3: diagonal, down, right
-    for _ in range(8): 
-        start_column = str(int(start_column) + 1) #right
-        test(f'case 3 {start_column}')
-        start_row = str(int(start_row) + 1) #down  #inverted row scale, high notation row = low row
-        test(f'case 3 {start_row}')
-        current_square = start_column + start_row
-
+    # Case 3: diagonal, down, right
+    temp_column = start_column_int
+    temp_row = start_row_int
+    for _ in range(8):
+        temp_column += 1  # right
+        temp_row += 1     # down
+        current_square = str(temp_column) + str(temp_row)
         if len(current_square) == 2:
             test(f'case 3 {reverse_notation(current_square)}')
-            possible_end_squares.append(reverse_notation(current_square)) 
-            if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+            possible_end_squares.append(reverse_notation(current_square))
+            if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square):
                 pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     #case 4: diagonal, down, left
