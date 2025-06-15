@@ -420,7 +420,7 @@ def bishop_conditions(start,end,board,colour):
     direction = pieces_in_between(start,end,'diagonal',board)
     pieces = []
 
-    start_column, start_row = int(turn_notation_compatible(start))
+    start_column, start_row = int(turn_notation_compatible(start)[0]), int(turn_notation_compatible(start)[1])
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
     #case 1: diagonal, up, right
