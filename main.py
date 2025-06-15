@@ -374,14 +374,6 @@ def pawn_conditions(start,end,board,colour):
 
 def knight_conditions(start,end,board,colour):
     '''Returns true if the knight move is legal'''
-    if start == end:
-        return False  # Can't move to the same square
-    if colour == 'White':
-        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
-            return False
-    else:
-        if check_piece_at_square(end,board) in black_pieces:
-            return False
     start_column, start_row = start #multi variable assignment
     end_column, end_row = end
     start_row, end_row = int(start_row), int(end_row)
@@ -401,15 +393,6 @@ def knight_conditions(start,end,board,colour):
 
 def rook_conditions(start, end, board, colour):
     '''Returns true if the rook move is legal'''
-    # Check if the start and end squares are the same
-    if start == end:
-        return False  # Can't move to the same square
-    if colour == 'White':
-        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
-            return False
-    else:
-        if check_piece_at_square(end,board) in black_pieces:
-            return False
     # Check for vertical movement
     if start[0] == end[0]:  # Same column
         pieces, direction = pieces_in_between(start, end, 'vertical', board)
@@ -442,14 +425,6 @@ def rook_conditions(start, end, board, colour):
 
 def bishop_conditions(start,end,board,colour):
     '''Returns true if the bishop move is legal'''
-    if start == end:
-        return False  # Can't move to the same square
-    if colour == 'White':
-        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
-            return False
-    else:
-        if check_piece_at_square(end,board) in black_pieces:
-            return False
     #setup direction and pieces
     direction = pieces_in_between(start,end,'diagonal',board)
     pieces = []
