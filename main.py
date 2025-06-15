@@ -405,14 +405,14 @@ def bishop_conditions(start,end,board,colour):
     possible_end_squares = [] 
     #case 1: diagonal, up, right
     for _ in range(8): #since bishops can move furthest, 8 squares in a specific direction
-        start_column = str(start_column + 1)
-        start_row = str(start_row + 1)
+        start_column = str(start_column + 1) #right
+        start_row = str(start_row + 1) #up
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
     #case 2: diagonal, up, left
     for _ in range(8): 
-        start_column = str(start_column - 1)
-        start_row = str(start_row + 1)
+        start_column = str(start_column - 1) #left
+        start_row = str(start_row + 1) #up
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
     #case 3: diagonal, down, right
@@ -421,6 +421,19 @@ def bishop_conditions(start,end,board,colour):
         start_row = str(start_row - 1) #down
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
+    #case 4: diagonal, down, left
+    for _ in range(8): 
+        start_column = str(start_column - 1) #left
+        start_row = str(start_row - 1) #down
+        possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
+    
+    possible_end_squares = squares_in_board(possible_end_squares)
+
+    if end in possible_end_squares: #if the end square is in the list of all possible squares
+        pieces, direction = pieces_in_between(start,end,'diagonal',board)
+        for piece in pieces:
+            if piece != '.':
+                return False #not empty squares in between
 
 def squares_in_board(list_of_squares):
     '''Checks if squares are part of the board. Returns a list of squares only part of the board.'''
@@ -468,8 +481,8 @@ def pieces_in_between(start, end, mode, board):
 
 def move_limits(pieces_in_between, direction, start_square, end_square, colour):
     '''Finds the furthest square to move to, based on the direction of movement and the square the user wants to move from and to.'''
-    white_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘','♙']
-    black_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞','♟']
+    black_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘','♙']
+    white_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞','♟']
     if direction in ['right', 'up']:
         step = 1
     else:
