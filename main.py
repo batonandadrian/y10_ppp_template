@@ -111,11 +111,13 @@ def move(colour,names,board):
             start_square = input(f'Where is your starting square, {names[0]}?\n').lower()
             end_square = input(f'Where is your end square, {names[0]}?\n').lower()
             test(check_piece_at_square(start_square,board))
+            test(check_piece_at_square(end_square,board))
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             # used to skip legal moves while it is not finished
             #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             if capture_own_check(end_square,board, colour) == True: #disallows self captures
+                test('not capture own')
                 if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
                     if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                         conditions_met = True
