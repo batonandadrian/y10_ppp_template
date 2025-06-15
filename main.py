@@ -404,10 +404,18 @@ def bishop_conditions(start,end,board,colour):
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
     #case 1: diagonal, up, right
-    for i in range(1,9): #numbers 1-8
-        start_column = str(start_column + 1)
+    for step in range(1,9): #numbers 1-8
+        start_column = str(start_column + step)
+        start_row = str(start_row + step)
+        possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
+    
+    #case 2: diagonal, up, left
+    for step in range(1,9): #numbers 1-8
+        start_column = str(start_column - 1)
         start_row = str(start_row + 1)
-        possible_end_squares.append(reverse_notation())
+        possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
+    
+    #case 
 
 def squares_in_board(list_of_squares):
     '''Checks if squares are part of the board. Returns a list of squares only part of the board.'''
