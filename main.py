@@ -29,8 +29,8 @@ self captures
 #git push
 
 #GLOBAL
-white_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
-black_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+black_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
+white_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
 
 def main():
     '''Opens up the menu'''
