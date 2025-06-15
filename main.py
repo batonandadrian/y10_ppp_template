@@ -7,9 +7,13 @@ import os
 # Default to empty board
 '''
 TASKS:
+- ALL Chess Features
+  - EN PASSANT
+  - CASTLING (CHECK pieces in between, move rook 2 squares and king 2 squares)
 - ADD turns (white move, black move) CORRECTLY
 - Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
 - Possibly Checkmate
+- Illegal move error messages
 - INSTRUCTIONS, tutorial boards
 - IMPROVE interface (icons, emojis, board outline?)
 - IMPROVE quality (having better print messages, showing which piece you want to move when you get the square of it)
