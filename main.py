@@ -399,6 +399,9 @@ def bishop_conditions(start,end,board,colour):
     else:
         if check_piece_at_square(end,board) in black_pieces:
             return False
+    #generate a list of all possible moves for 4 cases
+    possible_end_squares = []
+    #case 1: diagonal, up, right
     
 
 def pieces_in_between(start, end, mode, board):
