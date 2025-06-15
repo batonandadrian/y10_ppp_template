@@ -260,9 +260,10 @@ def king_conditions(start,end,board,colour):
 
 def queen_conditions(start,end,board,colour):
     '''Returns true if the queen move is legal'''
-    if rook_conditions(start,end,board,colour) or bishop_conditions():
+    if rook_conditions(start,end,board,colour) or bishop_conditions(start,end,board,colour):
         return True
-    pass
+    else:
+        return False
 def pawn_conditions(start,end,board,colour):
     '''Returns true if the pawn move is legal'''
     if start == end:
