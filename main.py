@@ -403,7 +403,7 @@ def bishop_conditions(start,end,board,colour):
     possible_end_squares = [] 
     #case 1: diagonal, up, right
     for i in range(8):
-        
+        possible_end_squares.append()
 def pieces_in_between(start, end, mode, board):
     start_row, start_column = turn_notation_compatible(start) #makes start row and column into compatible notation[0] and [1]
     end_row, end_column = turn_notation_compatible(end)
