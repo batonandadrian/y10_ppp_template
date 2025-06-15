@@ -443,7 +443,9 @@ def bishop_conditions(start,end,board,colour):
     #case 2: diagonal, up, left
     for _ in range(8): 
         start_column = str(int(start_column) - 1) #left
+        test(f'case 2 {start_column}')
         start_row = str(int(start_row) - 1) #up   #inverted row scale, high notation row = low row
+        test(f'case 2 {start_row}')
         current_square = start_column + start_row
         
         if len(current_square) == 2: #causes error if len is not 2 (meaning the indexes are positive, negative like 1-4)
@@ -455,7 +457,9 @@ def bishop_conditions(start,end,board,colour):
     #case 3: diagonal, down, right
     for _ in range(8): 
         start_column = str(int(start_column) + 1) #right
+        test(f'case 3 {start_column}')
         start_row = str(int(start_row) + 1) #down  #inverted row scale, high notation row = low row
+        test(f'case 3 {start_row}')
         current_square = start_column + start_row
 
         if len(current_square) == 2:
