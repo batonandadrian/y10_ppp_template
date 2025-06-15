@@ -27,8 +27,6 @@ COMPLETED:
 '''
 BUGS NEEDED TO FIX:
 fix try and except for user inputs
-queen conditions
-self captures
 '''
 #git stage *
 #git commit -m "message"
