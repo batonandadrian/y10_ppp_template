@@ -158,12 +158,13 @@ def move(colour,names,board):
                 else:
                     print(Back.BLUE + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
-            if conditions_met == True:
-                #extra checks
+            if conditions_met == True: #if piece specific legal conditions are met
+                #checks for more things
                 if check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
                     print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
-                elif no_move_check(start,end) == False:
-                    
+                    conditions_met = False
+                elif no_move_check(start_square,end_square) == False:
+                    print(Back.BLUE + Fore.WHITE + f'Stop trying to move your {check_piece_at_square(start_square, board)}  from {start_square}  to {end_square}!')
                     test('not capture own')
 
         #not complete
@@ -298,18 +299,10 @@ def queen_conditions(start,end,board,colour):
     
 def pawn_conditions(start,end,board,colour):
     '''Returns true if the pawn move is legal'''
-    if start == end:
-        test('Start is same as end')
-        return False #can't move to same square
-
     #cant capture own pieces
     if colour == 'White':
         test('Pawn is white')
-        if check_piece_at_square(end,board) in white_pieces:
-            test('self capture')
-            return False
-
-        elif start[0] == end[0]: #same column
+        if start[0] == end[0]: #same column
             test('column is the same')
             pieces, _ = pieces_in_between(start,end,'vertical',board) #gets piecesinbetween[0]
             print(pieces)
@@ -344,11 +337,8 @@ def pawn_conditions(start,end,board,colour):
 
     else: # Black pawn
         test('Pawn is black')
-        if check_piece_at_square(end,board) in black_pieces:
-            test('self capture')
-            return False
 
-        elif start[0] == end[0]:
+        if start[0] == end[0]:
             test('column is the same')
             pieces, _ = pieces_in_between(start,end,'vertical',board)
             print(pieces)
