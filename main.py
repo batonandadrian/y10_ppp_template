@@ -158,8 +158,9 @@ def move(colour,names,board):
                 else:
                     print(Back.BLUE + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
-        
-                
+            if conditions_met == True:
+                if check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
+                    print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
         #not complete
 
         return update_board(start_square,end_square,board)
