@@ -399,7 +399,7 @@ def bishop_conditions(start,end,board,colour):
     else:
         if check_piece_at_square(end,board) in black_pieces:
             return False
-        
+    
     start_column, start_row = start
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
