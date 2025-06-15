@@ -10,7 +10,7 @@ TASKS:
 - ALL Chess Features
   - EN PASSANT
   - CASTLING (CHECK pieces in between, move rook 2 squares and king 2 squares)
-- ADD turns (white move, black move) CORRECTLY
+- ADD turns (white move, black move) CORRECTLY [X]
 - Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
 - Possibly Checkmate
 - Illegal move error messages
@@ -19,6 +19,7 @@ TASKS:
 - IMPROVE quality (having better print messages, showing which piece you want to move when you get the square of it)
 - ADD toggleable clocks for each side (maybe not)
 - ADD settings (settings to toggle clocks, time for each side, highlight possible squares, background colour)
+- POLISH and remove test messages once done
 '''
 
 '''
