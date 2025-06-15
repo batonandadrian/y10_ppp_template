@@ -172,11 +172,75 @@ def move(colour,names,board):
                     conditions_met = False
                 
 
-        #not complete
+
 
         return update_board(start_square,end_square,board)
     else: #conditions for black
-        pass
+        if colour == 'Black': 
+            conditions_met = False
+            while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
+                start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
+                print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
+                end_square = input(f'Where is your end square, {names[1]}?\n').lower()
+                test(check_piece_at_square(start_square,board))
+                test(check_piece_at_square(end_square,board))
+                '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
+                # used to skip legal moves while it is not finished
+                #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
+                '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
+                
+                
+                if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
+                    if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
+                        conditions_met = True
+                    else:
+                        print(Back.BLUE + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+                elif check_piece_at_square(start_square,board) == '♜':
+                    if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
+                        conditions_met = True
+                    else:
+                        print(Back.BLUE + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+
+                elif check_piece_at_square(start_square,board) == '♟':
+                    if pawn_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.BLUE + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+                        
+                elif check_piece_at_square(start_square,board) == '♞':
+                    if knight_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.BLUE + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+
+                elif check_piece_at_square(start_square,board) == '♝':
+                    if bishop_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.BLUE + Fore.BLACK + f'The bishop could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+
+                elif check_piece_at_square(start_square,board) == '♛':
+                    if queen_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.BLUE + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+                if conditions_met == True: #if piece specific legal conditions are met
+                    #checks for more things
+                    if no_move_check(start_square,end_square) == False:
+                        print(Back.BLUE + Fore.WHITE + f'Stop trying to move your {check_piece_at_square(start_square, board)}  from {start_square} to {end_square}!' + Style.RESET_ALL)
+                        conditions_met = False
+                    elif check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
+                        print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
+                        conditions_met = False
+                    
+
+            return update_board(start_square,end_square,board)
 
 def check_piece_at_square(square, board):
     '''Returns the piece at the square when put into the format "letternumber" '''
