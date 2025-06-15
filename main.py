@@ -34,7 +34,6 @@ self captures
 #git commit -m "message"
 #git push
 
-#GLOBAL
 black_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
 white_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
 
