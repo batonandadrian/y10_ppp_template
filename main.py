@@ -174,6 +174,7 @@ def edit_square(square,piece,board):
     return board
 
 def setup_players():
+    '''Gets the names of each player'''
     print("Let's play!")
     names = [input('Player 1 (White), enter your name.\n'), input('Player 2 (Black), enter your name.\n')]
     return names
@@ -252,11 +253,12 @@ def king_conditions(start,end,board,colour):
     pass
 
 def queen_conditions(start,end,board,colour):
-    #could combine rook and bishop conditions
+    '''Returns true if the queen move is legal'''
     if rook_conditions() or bishop_conditions():
         return True
     pass
 def pawn_conditions(start,end,board,colour):
+    '''Returns true if the pawn move is legal'''
     if start == end:
         test('Start is same as end')
         return False #can't move to same square
@@ -342,6 +344,7 @@ def pawn_conditions(start,end,board,colour):
 
 
 def knight_conditions(start,end,board,colour):
+    '''Returns true if the knight move is legal'''
     if start == end:
         return False  # Can't move to the same square
     if colour == 'White':
@@ -368,6 +371,7 @@ def knight_conditions(start,end,board,colour):
         return False
 
 def rook_conditions(start, end, board, colour):
+    '''Returns true if the rook move is legal'''
     # Check if the start and end squares are the same
     if start == end:
         return False  # Can't move to the same square
@@ -408,6 +412,7 @@ def rook_conditions(start, end, board, colour):
     return False  #invalid move (not straight)
 
 def bishop_conditions(start,end,board,colour):
+    '''Returns true if the bishop move is legal'''
     if start == end:
         return False  # Can't move to the same square
     if colour == 'White':
@@ -486,6 +491,7 @@ def squares_in_board(list_of_squares):
     return new_list_squares
 
 def pieces_in_between(start, end, mode, board):
+    '''Returns the list of pieces in between 2 squares, depending on the mode. Also returns the direction from start to end.'''
     start_row, start_column = turn_notation_compatible(start) #makes start row and column into compatible notation[0] and [1]
     end_row, end_column = turn_notation_compatible(end)
 
@@ -588,6 +594,7 @@ def move_limits(pieces_in_between, direction, start_square, end_square, colour):
 
 
 def turn_notation_compatible(square):
+    '''Turns the notation in chess format (a4) into an indexable format (04)'''
     square = str(square)
     
     # error if its not 2 digits (prevents it from working)
