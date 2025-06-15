@@ -159,10 +159,13 @@ def move(colour,names,board):
                     print(Back.BLUE + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
                     display_board(board)
             if conditions_met == True:
+                #extra checks
                 if check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
                     print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
-                else:
+                elif no_move_check(start,end) == False:
+                    
                     test('not capture own')
+
         #not complete
 
         return update_board(start_square,end_square,board)
@@ -263,6 +266,7 @@ def menu():
     return menu_result
 
 def capture_own_check(end,board,colour):
+    '''Checks if a move ends on a piece of the same colour.'''
     if colour == 'White':
         if check_piece_at_square(end,board) in white_pieces:
             return False
@@ -274,7 +278,13 @@ def capture_own_check(end,board,colour):
             return False
         else:
             return True
-            
+
+def no_move_check(start,end):
+    '''Checks if the starting square is the same as the ending square.'''
+    if start == end:
+        return False
+    else:
+        return True
 
 def king_conditions(start,end,board,colour):
     pass
@@ -285,6 +295,7 @@ def queen_conditions(start,end,board,colour):
         return True
     else:
         return False
+    
 def pawn_conditions(start,end,board,colour):
     '''Returns true if the pawn move is legal'''
     if start == end:
