@@ -488,7 +488,7 @@ def rook_conditions(start, end, board, colour):
     # Check for vertical movement
     if start[0] == end[0]:  # Same column
         pieces, direction = pieces_in_between(start, end, 'vertical', board)
-        
+        test(pieces)
         # Ensure all pieces between the start and end are empty
         if len(pieces) != 1: #len 1 needs special case
             for piece in pieces:
@@ -506,7 +506,7 @@ def rook_conditions(start, end, board, colour):
     # Check for horizontal movement
     elif start[1] == end[1]:  # Same row
         pieces, direction = pieces_in_between(start, end, 'horizontal', board)
-        
+        test(pieces)
         # Ensure all pieces between the start and end are empty
         if len(pieces) != 1: #len 1 needs special case
             for piece in pieces:
