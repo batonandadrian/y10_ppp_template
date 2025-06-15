@@ -117,7 +117,7 @@ def move(colour,names,board):
             #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
             
-            test('not capture own')
+            
             if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
                 if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
                     conditions_met = True
@@ -161,6 +161,8 @@ def move(colour,names,board):
             if conditions_met == True:
                 if check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
                     print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
+                else:
+                    test('not capture own')
         #not complete
 
         return update_board(start_square,end_square,board)
