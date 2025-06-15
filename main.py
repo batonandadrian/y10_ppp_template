@@ -496,6 +496,7 @@ def rook_conditions(start, end, board, colour):
                     return False  # Blocked by another piece
         else:
             if check_piece_at_square(end,board) == '.':
+                test('end is empty')
                 return True
         if move_limits(pieces,direction,start,end,colour) == True:
             return True
@@ -513,6 +514,7 @@ def rook_conditions(start, end, board, colour):
                     return False  # Blocked by another piece
         else:
             if check_piece_at_square(end,board) == '.':
+                test('end is empty')
                 return True
             
         if move_limits(pieces,direction,start,end,colour) == True:
