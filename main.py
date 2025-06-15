@@ -11,6 +11,8 @@ TASKS:
   - EN PASSANT
   - CASTLING (CHECK pieces in between, move rook 2 squares and king 2 squares)
   - CHECKS (Has to make a move that stops the check, if none then it is checkmate (maybe surrendering instead of checkmate))
+    - Determining the valid moves for each opponent's piece.
+    - Checking if any of those valid moves land on the square occupied by the king.
 - ADD turns (white move, black move) CORRECTLY [V]
 
 - Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
