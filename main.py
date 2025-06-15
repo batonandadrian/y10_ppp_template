@@ -72,7 +72,7 @@ def main():
     colour = 'White'
     while game_in_progress:
         start_turn(colour, names, board)
-        display_board(board) #not going to work, needs an update_board() function
+        # #not going to work, needs an update_board() function
         colour = turn(colour)
         
 def clear():
@@ -186,6 +186,7 @@ def move(colour,names,board):
         test('black')
         conditions_met = False
         while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
+            test('black')
             display_board(board)
             start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
             print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
@@ -376,7 +377,7 @@ def opposite_turn_movement(start,board,colour):
     elif check_piece_at_square(start,board) in white_pieces and colour == 'Black': #selecting white piece during black turn
         return False
     else:
-        return False
+        return True
     
 def king_conditions(start,end,board,colour):
     pass
