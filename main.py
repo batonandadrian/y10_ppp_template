@@ -115,47 +115,49 @@ def move(colour,names,board):
             # used to skip legal moves while it is not finished
             #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-            if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
-                if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
-                    conditions_met = True
-                else:
-                    print(Back.RED + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-            elif check_piece_at_square(start_square,board) == '♜':
-                if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
-                    conditions_met = True
-                else:
-                    print(Back.RED + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+            if capture_own_check(end_square,board, colour) == True: #disallows self captures
+                if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
+                    if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
+                        conditions_met = True
+                    else:
+                        print(Back.RED + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+                elif check_piece_at_square(start_square,board) == '♜':
+                    if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
+                        conditions_met = True
+                    else:
+                        print(Back.RED + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
 
-            elif check_piece_at_square(start_square,board) == '♟':
-                if pawn_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-                    
-            elif check_piece_at_square(start_square,board) == '♞':
-                if knight_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.RED + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+                elif check_piece_at_square(start_square,board) == '♟':
+                    if pawn_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.RED + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+                        
+                elif check_piece_at_square(start_square,board) == '♞':
+                    if knight_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.RED + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
 
-            elif check_piece_at_square(start_square,board) == '♝':
-                if bishop_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.RED + Fore.BLACK + f'The bishop could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+                elif check_piece_at_square(start_square,board) == '♝':
+                    if bishop_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.RED + Fore.BLACK + f'The bishop could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
 
-            elif check_piece_at_square(start_square,board) == '♛':
-                if queen_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.RED + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-            # display_board(board)
+                elif check_piece_at_square(start_square,board) == '♛':
+                    if queen_conditions(start_square,end_square,board,colour) == True:
+                        conditions_met = True
+                    else:
+                        print(Back.RED + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
+                        display_board(board)
+            else:
+                print(Back.RED + Fore.BLACK + f'Why is your {check_piece_at_square(start_square)} trying to capture your own {check_piece_at_square(end_square)} at {end_square}?' + Style.RESET_ALL)
         #not complete
 
         return update_board(start_square,end_square,board)
@@ -254,6 +256,20 @@ def menu():
         #clear() TESTING ONLY! REMOVE # WHEN COMPLETE
         menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
     return menu_result
+
+def capture_own_check(end,board,colour):
+    if colour == 'White':
+        if check_piece_at_square(end,board) in white_pieces:
+            return False
+            
+        else:
+            return True
+    else:
+        if check_piece_at_square(end,board) in black_pieces:
+            return False
+        else:
+            return True
+            
 
 def king_conditions(start,end,board,colour):
     pass
