@@ -438,7 +438,10 @@ def bishop_conditions(start,end,board,colour):
         start_column = str(start_column - 1) #left
         start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
         current_square = start_column + start_row
-        possible_end_squares.append(reverse_notation(current_square)) 
+        possible_end_squares.append(reverse_notation(current_square))
+        if direction == 'bottomleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+            
     possible_end_squares = squares_in_board(possible_end_squares) #only gets the squares inside the board
 
     if end in possible_end_squares: #if the end square is in the list of all possible squares
