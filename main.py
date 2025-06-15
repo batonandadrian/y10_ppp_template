@@ -7,16 +7,22 @@ import os
 # Default to empty board
 '''
 TASKS:
-- ADD try: except: and while: to prevent errors
-- ADD movement restrictions
-- ADD turn restrictions (can't move from the same square to the same square)
+- ADD turns (white move, black move) CORRECTLY
+- INSTRUCTIONS, tutorial boards
 '''
 
+'''
+COMPLETED:
+- restrictions for all pieces (except king)
+- movement system
 
+'''
 
 '''
 BUGS NEEDED TO FIX:
 fix try and except for user inputs
+queen conditions
+self captures
 '''
 #git stage *
 #git commit -m "message"
@@ -254,7 +260,7 @@ def king_conditions(start,end,board,colour):
 
 def queen_conditions(start,end,board,colour):
     '''Returns true if the queen move is legal'''
-    if rook_conditions() or bishop_conditions():
+    if rook_conditions(start,end,board,colour) or bishop_conditions():
         return True
     pass
 def pawn_conditions(start,end,board,colour):
