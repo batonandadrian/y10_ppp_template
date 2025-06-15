@@ -406,25 +406,25 @@ def bishop_conditions(start,end,board,colour):
     #case 1: diagonal, up, right
     for _ in range(8): #since bishops can move furthest, 8 squares in a specific direction
         start_column = str(start_column + 1) #right
-        start_row = str(start_row + 1) #up
+        start_row = str(start_row - 1) #up #inverted row scale, high notation row = low row
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
     #case 2: diagonal, up, left
     for _ in range(8): 
         start_column = str(start_column - 1) #left
-        start_row = str(start_row + 1) #up
+        start_row = str(start_row - 1) #up   #inverted row scale, high notation row = low row
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
     #case 3: diagonal, down, right
     for _ in range(8): 
         start_column = str(start_column + 1) #right
-        start_row = str(start_row - 1) #down
+        start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
     #case 4: diagonal, down, left
     for _ in range(8): 
         start_column = str(start_column - 1) #left
-        start_row = str(start_row - 1) #down
+        start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
     
     possible_end_squares = squares_in_board(possible_end_squares)
@@ -478,7 +478,21 @@ def pieces_in_between(start, end, mode, board):
             piece_at_square = check_piece_at_square(square, board)
             pieces_between.append(piece_at_square)
     else: #mode = diagonal
-        pass
+        # 4 cases
+        start_column, start_row = turn_notation_compatible(start) #notation is (11) example
+        end_column, end_row = turn_notation_compatible(end) #notation is (12) example
+
+        if end_column > start_column and end_row < start_row: #top right, as row scale is inverted
+            direction = 'upright'
+        elif end_column < start_column and end_row < start_row: #top left
+            direction = 'upleft'
+        elif end_column > start_column and end_row > start_row: #bottom right
+            direction = 'bottomright'
+        elif end_column < start_column and end_row > start_row: #bottom left
+            direction = 'bottomleft'
+        else:
+            direction = None
+        
     return [pieces_between,direction]  #return pieces in between
     
 
