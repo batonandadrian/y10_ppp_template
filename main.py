@@ -413,27 +413,33 @@ def bishop_conditions(start,end,board,colour):
         current_square = start_column + start_row
         possible_end_squares.append(reverse_notation(current_square)) #adds the square 1 up and 1 right of the previous
         if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-            pieces.append()
+            pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     #case 2: diagonal, up, left
     for _ in range(8): 
         start_column = str(start_column - 1) #left
         start_row = str(start_row - 1) #up   #inverted row scale, high notation row = low row
         current_square = start_column + start_row
-        possible_end_squares.append(reverse_notation(current_square)) #adds the square 1 up and 1 right of the previous
+        possible_end_squares.append(reverse_notation(current_square)) 
+        if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+
     #case 3: diagonal, down, right
     for _ in range(8): 
         start_column = str(start_column + 1) #right
         start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
         current_square = start_column + start_row
-        possible_end_squares.append(reverse_notation(current_square)) #adds the square 1 up and 1 right of the previous
+        possible_end_squares.append(reverse_notation(current_square)) 
+        if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+
     #case 4: diagonal, down, left
     for _ in range(8): 
         start_column = str(start_column - 1) #left
         start_row = str(start_row + 1) #down  #inverted row scale, high notation row = low row
         current_square = start_column + start_row
-        possible_end_squares.append(reverse_notation(current_square)) #adds the square 1 up and 1 right of the previous
-    possible_end_squares = squares_in_board(possible_end_squares)
+        possible_end_squares.append(reverse_notation(current_square)) 
+    possible_end_squares = squares_in_board(possible_end_squares) #only gets the squares inside the board
 
     if end in possible_end_squares: #if the end square is in the list of all possible squares
         for piece in pieces:
