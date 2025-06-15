@@ -400,10 +400,10 @@ def bishop_conditions(start,end,board,colour):
         if check_piece_at_square(end,board) in black_pieces:
             return False
     #generate a list of all possible moves for 4 cases
-    possible_end_squares = []
+    possible_end_squares = [] 
     #case 1: diagonal, up, right
-    
-
+    for i in range(8):
+        
 def pieces_in_between(start, end, mode, board):
     start_row, start_column = turn_notation_compatible(start) #makes start row and column into compatible notation[0] and [1]
     end_row, end_column = turn_notation_compatible(end)
