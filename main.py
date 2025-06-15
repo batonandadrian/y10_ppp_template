@@ -588,7 +588,7 @@ def bishop_conditions(start,end,board,colour):
         start_column = str(int(start_column) - 1) #left
         start_row = str(int(start_row) + 1) #down  #inverted row scale, high notation row = low row
         current_square = start_column + start_row
-
+        
         if len(current_square) == 2:
             test(f'case 4 {reverse_notation(current_square)}')
             possible_end_squares.append(reverse_notation(current_square)) 
