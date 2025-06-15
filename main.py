@@ -391,7 +391,15 @@ def rook_conditions(start, end, board, colour):
     return False  #invalid move (not straight)
 
 def bishop_conditions(start,end,board,colour):
-    pass
+    if start == end:
+        return False  # Can't move to the same square
+    if colour == 'White':
+        if check_piece_at_square(end,board) in white_pieces: #if your colour is white, you cannot capture own pieces
+            return False
+    else:
+        if check_piece_at_square(end,board) in black_pieces:
+            return False
+    
 
 def pieces_in_between(start, end, mode, board):
     start_row, start_column = turn_notation_compatible(start) #makes start row and column into compatible notation[0] and [1]
