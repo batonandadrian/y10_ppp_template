@@ -436,8 +436,8 @@ def bishop_conditions(start,end,board,colour):
         test(current_square)
         if len(current_square) == 2:
             possible_end_squares.append(reverse_notation(current_square))  #adds the square 1 up and 1 right of the previous
-        if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+            if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+                pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     #case 2: diagonal, up, left
     for _ in range(8): 
@@ -447,8 +447,8 @@ def bishop_conditions(start,end,board,colour):
         test(current_square)
         if len(current_square) == 2:
             possible_end_squares.append(reverse_notation(current_square)) 
-        if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+            if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+                pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     #case 3: diagonal, down, right
     for _ in range(8): 
@@ -458,8 +458,8 @@ def bishop_conditions(start,end,board,colour):
         test(current_square)
         if len(current_square) == 2:
             possible_end_squares.append(reverse_notation(current_square)) 
-        if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+            if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+                pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     #case 4: diagonal, down, left
     for _ in range(8): 
@@ -469,8 +469,8 @@ def bishop_conditions(start,end,board,colour):
         test(current_square)
         if len(current_square) == 2:
             possible_end_squares.append(reverse_notation(current_square)) 
-        if direction == 'bottomleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-            pieces.append(check_piece_at_square(reverse_notation(current_square)))
+            if direction == 'bottomleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
+                pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     possible_end_squares = squares_in_board(possible_end_squares) #only gets the squares inside the board
     test(possible_end_squares)
