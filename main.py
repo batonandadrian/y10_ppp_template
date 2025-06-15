@@ -365,6 +365,8 @@ def no_move_check(start,end):
     else:
         return True
 
+def opposite_turn_movement(start,board,colour):
+    '''Returns false if a piece is selected on the opponent's turn'''
 def king_conditions(start,end,board,colour):
     pass
 
