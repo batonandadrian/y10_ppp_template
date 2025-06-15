@@ -111,6 +111,7 @@ def move(colour,names,board):
     if colour == 'White': #conditions for white
         conditions_met = False
         while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
+            test('white')
             start_square = input(f'Where is your starting square, {names[0]}?\n').lower()
             print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
             end_square = input(f'Where is your end square, {names[0]}?\n').lower()
@@ -180,6 +181,7 @@ def move(colour,names,board):
         return update_board(start_square,end_square,board)
     
     else: #conditions for black
+        test('black')
         conditions_met = False
         while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
             start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
