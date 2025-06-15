@@ -400,12 +400,14 @@ def bishop_conditions(start,end,board,colour):
         if check_piece_at_square(end,board) in black_pieces:
             return False
     
-    start_column, start_row = start
+    start_column, start_row = turn_notation_compatible(start)
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
     #case 1: diagonal, up, right
     for i in range(1,9): #numbers 1-8
-        possible_end_squares.append()
+        start_column = str(start_column + 1)
+        start_row = str(start_row + 1)
+        possible_end_squares.append(reverse_notation())
 
 def squares_in_board(list_of_squares):
     '''Checks if squares are part of the board. Returns a list of squares only part of the board.'''
