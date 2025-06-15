@@ -12,7 +12,7 @@ TASKS:
 - IMPROVE interface (icons, emojis, board outline?)
 - IMPROVE quality (having better print messages, showing which piece you want to move when you get the square of it)
 - ADD toggleable clocks for each side (maybe not)
-- ADD settings (settings to change)
+- ADD settings (settings to toggle clocks, time for each side, highlight possible squares)
 '''
 
 '''
