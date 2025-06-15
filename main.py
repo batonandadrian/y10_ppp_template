@@ -434,7 +434,10 @@ def bishop_conditions(start,end,board,colour):
         for piece in pieces:
             if piece != '.':
                 return False #not empty squares in between
-
+        return True
+    else:
+        return False #if the end square is not within bishop scope and moves
+    
 def squares_in_board(list_of_squares):
     '''Checks if squares are part of the board. Returns a list of squares only part of the board.'''
     new_list_squares = []
