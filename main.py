@@ -73,8 +73,9 @@ def clear():
 def instructions():
     '''Displays instructions - Checks for which type of thing the user needs help on'''
     clear()
-    while instruct_result not in '1 2 3 4 5 6 7 8 9 10 11 12': 
-        instruct_result = input('Which part of the game would you like to know more? \n1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n10. Losses \n11. Draws \n')
+    instruct_result = int(input('Which part of the game would you like to know more? \n1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n10. Losses \n11. Draws \n'))
+    while instruct_result not in [1,2,3,4,5,6,7,8,9,10,11]:
+        instruct_result = int(input('Which part of the game would you like to know more? \n1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n10. Losses \n11. Draws \n'))
     if instruct_result == '1':
         pass
         #WORK IN PROGRESS
@@ -512,33 +513,6 @@ def reverse_notation(square):
 def test(message):
     '''To make it clear that a print message is for testing purposes'''
     print(Fore.MAGENTA + f'{message}\n' + Style.RESET_ALL)
-
-
-def cool_coloured_text(text):
-    '''Format: /colourletters(colour)letters'''
-    final_text = ''
-    colour = ''
-    for letter_index in range(len(text)):
-        if text[letter_index] == '/':
-            colour = text[letter_index+1]
-        
-        if text[letter_index-1] == '/':
-             continue
-        else:
-            colour = text[letter_index - 1]
-            if colour == 'm': #magenta
-                final_text += Fore.MAGENTA + text[letter_index] + Style.RESET_ALL
-            elif colour == 'b': #blue
-                final_text += Fore.BLUE + text[letter_index] + Style.RESET_ALL
-            elif colour == 'y': #yellow
-                final_text += Fore.YELLOW + text[letter_index] + Style.RESET_ALL 
-            elif colour == 'c': #cyan
-                final_text += Fore.CYAN + text[letter_index] + Style.RESET_ALL  
-            elif colour == 'g': #green
-                final_text += Fore.GREEN + text[letter_index] + Style.RESET_ALL
-            elif colour == 'r': #red
-                final_text += Fore.RED + text[letter_index] + Style.RESET_ALL
-    print(final_text)
 
 
 main()
