@@ -178,7 +178,7 @@ def move(colour,names,board):
             if opposite_turn_movement(start_square,board,colour) == False:
                 conditions_met = False
 
-
+        test('board update')
         return update_board(start_square,end_square,board)
     
     else: #conditions for black
@@ -375,6 +375,7 @@ def opposite_turn_movement(start,board,colour):
         return False
     else:
         return False
+    
 def king_conditions(start,end,board,colour):
     pass
 
