@@ -399,11 +399,22 @@ def bishop_conditions(start,end,board,colour):
     else:
         if check_piece_at_square(end,board) in black_pieces:
             return False
+        
+    start_column, start_row = start
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
     #case 1: diagonal, up, right
-    for i in range(8):
+    for i in range(1,9): #numbers 1-8
         possible_end_squares.append()
+
+def squares_in_board(list_of_squares):
+    '''Checks if squares are part of the board. Returns a list of squares only part of the board.'''
+    new_list_squares = []
+    for square in list_of_squares:
+        if square[0] in ['a','b','c','d','e','f','g','h'] and square[1] in [1,2,3,4,5,6,7,8]:
+            new_list_squares.append(square)
+    return new_list_squares
+
 def pieces_in_between(start, end, mode, board):
     start_row, start_column = turn_notation_compatible(start) #makes start row and column into compatible notation[0] and [1]
     end_row, end_column = turn_notation_compatible(end)
