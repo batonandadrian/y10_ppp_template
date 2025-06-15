@@ -490,7 +490,7 @@ def rook_conditions(start, end, board, colour):
         pieces, direction = pieces_in_between(start, end, 'vertical', board)
         test(pieces)
         # Ensure all pieces between the start and end are empty
-        if len(pieces) != 1: #len 1 needs special case
+        if len(pieces) != 0: #len 0 needs special case
             for piece in pieces:
                 if piece != '.': #if the square is not empty
                     return False  # Blocked by another piece
@@ -508,7 +508,7 @@ def rook_conditions(start, end, board, colour):
         pieces, direction = pieces_in_between(start, end, 'horizontal', board)
         test(pieces)
         # Ensure all pieces between the start and end are empty
-        if len(pieces) != 1: #len 1 needs special case
+        if len(pieces) != 0: #len 1 needs special case (moving 1 square past)
             for piece in pieces:
                 if piece != '.': #if the square is not empty
                     return False  # Blocked by another piece
