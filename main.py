@@ -399,7 +399,7 @@ def bishop_conditions(start,end,board,colour):
     else:
         if check_piece_at_square(end,board) in black_pieces:
             return False
-    
+    direction = pieces_in_between(start,end,'diagonal',board)
     start_column, start_row = turn_notation_compatible(start)
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
@@ -430,7 +430,6 @@ def bishop_conditions(start,end,board,colour):
     possible_end_squares = squares_in_board(possible_end_squares)
 
     if end in possible_end_squares: #if the end square is in the list of all possible squares
-        pieces, direction = pieces_in_between(start,end,'diagonal',board)
         for piece in pieces:
             if piece != '.':
                 return False #not empty squares in between
@@ -492,7 +491,7 @@ def pieces_in_between(start, end, mode, board):
             direction = 'bottomleft'
         else:
             direction = None
-        
+        return direction #returns direction only, instead of pieces and direction
     return [pieces_between,direction]  #return pieces in between
     
 
