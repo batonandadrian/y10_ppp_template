@@ -473,7 +473,7 @@ def bishop_conditions(start,end,board,colour):
             pieces.append(check_piece_at_square(reverse_notation(current_square)))
 
     possible_end_squares = squares_in_board(possible_end_squares) #only gets the squares inside the board
-
+    test(possible_end_squares)
     if end in possible_end_squares: #if the end square is in the list of all possible squares
         for piece in pieces:
             if piece != '.':
