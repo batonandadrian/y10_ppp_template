@@ -242,11 +242,12 @@ def move(colour,names,board):
                     print(Back.BLUE + Fore.WHITE + f'Stop trying to move your {check_piece_at_square(start_square, board)}  from {start_square} to {end_square}!' + Style.RESET_ALL)
                     conditions_met = False
                     display_board(board)
-                elif check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
+                elif check_piece_at_square(end_square,board) in black_pieces: #prints illegal move message if move pattern is legal but self capturing
                     print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
                     conditions_met = False
                     display_board(board)
-                
+            
+            
 
         return update_board(start_square,end_square,board)
 
