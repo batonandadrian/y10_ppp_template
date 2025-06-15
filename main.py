@@ -399,7 +399,10 @@ def bishop_conditions(start,end,board,colour):
     else:
         if check_piece_at_square(end,board) in black_pieces:
             return False
+    #setup direction and pieces
     direction = pieces_in_between(start,end,'diagonal',board)
+    pieces = []
+
     start_column, start_row = turn_notation_compatible(start)
     #generate a list of all possible moves for 4 cases
     possible_end_squares = [] 
@@ -408,7 +411,7 @@ def bishop_conditions(start,end,board,colour):
         start_column = str(start_column + 1) #right
         start_row = str(start_row - 1) #up #inverted row scale, high notation row = low row
         possible_end_squares.append(reverse_notation(start_column + start_row)) #adds the square 1 up and 1 right of the previous
-    
+
     #case 2: diagonal, up, left
     for _ in range(8): 
         start_column = str(start_column - 1) #left
