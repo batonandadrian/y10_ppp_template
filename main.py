@@ -185,6 +185,10 @@ def move(colour,names,board):
                     conditions_met = False
                     display_board(board)
                 
+            if check_check(board,colour): #check if its own king in check
+                if checkmate(board,colour):
+                    end_game()
+                
             if opposite_turn_movement(start_square,board,colour) == False:
                 conditions_met = False
 
@@ -282,6 +286,9 @@ def edit_square(square,piece,board):
     board[square[1]][square[0]] = piece #changing the piece at the square
     return board
 
+
+def end_game(colour):
+    '''The game wends when '''
 def setup_players():
     '''Gets the names of each player'''
     print("Let's play!")
