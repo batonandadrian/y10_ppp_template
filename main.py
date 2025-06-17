@@ -288,7 +288,12 @@ def edit_square(square,piece,board):
 
 
 def end_game(colour):
-    '''The game wends when '''
+    '''The game ends when someone is checkmated'''
+    pass
+
+def check_check(board,colour):
+    '''Checks if the current player is in check'''
+    
 def setup_players():
     '''Gets the names of each player'''
     print("Let's play!")
