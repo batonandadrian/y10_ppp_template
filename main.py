@@ -293,7 +293,7 @@ def end_game(colour):
 
 def check_check(board,colour):
     '''Checks if the current player is in check'''
-    
+    #iterates 
 def setup_players():
     '''Gets the names of each player'''
     print("Let's play!")
