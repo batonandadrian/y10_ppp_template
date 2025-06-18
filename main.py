@@ -11,7 +11,16 @@ TASKS:
 - LOGIC FOR CHECk:
  - Iterating through the board to check for each piece. If the piece can currently move to the king's position:
    - Then the king is in check
- 
+   - Otherwise, the king is not in check
+
+- LOGIC FOR CHECKMATE
+ - CHECK IF the opposing KING is currently in check
+  - IF not, return False
+  - IF yes, find each empty square or square occupied by opposite coloured piece to the king the king can move to
+   - Iterate through each square the opposing king can move to
+    - Use check() to find if any piece is checking each of the squares around the king
+    - If a square next to the king is being checked, that means the king cannot move there
+  - If every single available square that the king can move to, AND the king is currently in check, it is a checkmate
 
 
 
