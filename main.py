@@ -6,7 +6,7 @@ import os
 #print(Fore.RED + 'This text is red in color')
 # Default to empty board
 '''
-TASKS:
+TASKS (HIGH TO LOW PRIORITY):
 - Finish CHECK and CHECKMATE
 - LOGIC FOR CHECk:
  - Iterating through the board to check for each piece. If the piece can currently move to the king's position:
@@ -306,16 +306,23 @@ def edit_square(square,piece,board):
     board[square[1]][square[0]] = piece #changing the piece at the square
     return board
 
-
+'''Finish subroutines below here.'''
 def end_game(colour):
     '''The game ends when someone is checkmated'''
+    
     pass
 
 def check_check(board,colour):
     '''Checks if the current player is in check'''
     #iterates through every piece on the board, checks the legal moves for each piece
     #if the opposite coloured piece has a legal move to the king, the current player is in check
-    pass
+    king_square = find_king_pos(board,colour)
+    for square in board:
+        if square != '.':
+            if colour == 'White':
+                if check_piece_at_square == 'whitebishop':
+                    if bishop_conditions(square, king_square, board, colour) == True:
+                        pass
 
 def checkmate(board,colour):
     '''Checks if the current player is in checkmate'''
@@ -330,16 +337,21 @@ def checkmate(board,colour):
                 if colour == 'White':
                     if square == 'bishop':
                         if bishop_conditions(square, current_square, board, colour) == True: 
+                            pass #incomplete
 
-def find_king_pos(colour):
+def find_king_pos(board,colour):
     '''Finds the square of the king on the board'''
     #iterate through the board
     if colour == 'White':
         king = '♚'
     else:
         king = '♔'
-    square = 'Find the square by a loop somehow'
-    return square
+    location = ''
+    for row in board:
+        for column in row:
+            if column == king:
+                location = column+row
+    return location
 
 def check_squares_around_king(king_square,board,colour):
     '''Returns a list of squares the opposing king is able to move to '''
@@ -348,6 +360,7 @@ def check_squares_around_king(king_square,board,colour):
     #remove all the squares outside the board
     #remove all the squares occupied by the piece of the same colour
     return possible_squares
+'''Finish subroutines above here.'''
 def setup_players():
     '''Gets the names of each player'''
     print("Let's play!")
