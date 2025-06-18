@@ -7,6 +7,17 @@ import os
 # Default to empty board
 '''
 TASKS:
+- Finish CHECK and CHECKMATE
+- LOGIC FOR CHECk:
+ - Iterating through the board to check for each piece. If the piece can currently move to the king's position:
+   - Then the king is in check
+ 
+
+
+
+
+
+
 - ALL Chess Features
   - EN PASSANT
   - CASTLING (CHECK pieces in between, move rook 2 squares and king 2 squares)
@@ -293,7 +304,41 @@ def end_game(colour):
 
 def check_check(board,colour):
     '''Checks if the current player is in check'''
-    #iterates 
+    #iterates through every piece on the board, checks the legal moves for each piece
+    #if the opposite coloured piece has a legal move to the king, the current player is in check
+    pass
+
+def checkmate(board,colour):
+    '''Checks if the current player is in checkmate'''
+    #iterates through every piece, checks if any piece is legally 'checking' the squares next to the king
+    #nested loop
+    #INCOMPLETE PSUEDOCODE
+    king_square = find_king_pos(colour)
+    available_squares = check_squares_around_king(king_square,board,colour)
+    for current_square in available_squares: #for each square around the king
+        for square in board:
+            if square != '.': #if square is empty
+                if colour == 'White':
+                    if square == 'bishop':
+                        if bishop_conditions(square, current_square, board, colour) == True: 
+
+def find_king_pos(colour):
+    '''Finds the square of the king on the board'''
+    #iterate through the board
+    if colour == 'White':
+        king = '♚'
+    else:
+        king = '♔'
+    square = 'Find the square by a loop somehow'
+    return square
+
+def check_squares_around_king(king_square,board,colour):
+    '''Returns a list of squares the opposing king is able to move to '''
+    possible_squares = []
+    #add all the squares around the king
+    #remove all the squares outside the board
+    #remove all the squares occupied by the piece of the same colour
+    return possible_squares
 def setup_players():
     '''Gets the names of each player'''
     print("Let's play!")
