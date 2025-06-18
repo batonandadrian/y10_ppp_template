@@ -309,18 +309,20 @@ def edit_square(square,piece,board):
 '''Finish subroutines below here.'''
 def end_game(colour):
     '''The game ends when someone is checkmated'''
-    
+
     pass
 
 def check_check(board,colour):
     '''Checks if the current player is in check'''
+    black_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
+    white_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
     #iterates through every piece on the board, checks the legal moves for each piece
     #if the opposite coloured piece has a legal move to the king, the current player is in check
     king_square = find_king_pos(board,colour)
     for square in board:
         if square != '.':
-            if colour == 'White':
-                if check_piece_at_square == 'whitebishop':
+            if colour == 'White': 
+                if check_piece_at_square == '♝':
                     if bishop_conditions(square, king_square, board, colour) == True:
                         pass
 
@@ -335,7 +337,7 @@ def checkmate(board,colour):
         for square in board:
             if square != '.': #if square is empty
                 if colour == 'White':
-                    if square == 'bishop':
+                    if square == '♝':
                         if bishop_conditions(square, current_square, board, colour) == True: 
                             pass #incomplete
 
