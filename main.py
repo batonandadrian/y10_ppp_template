@@ -358,9 +358,23 @@ def find_king_pos(board,colour):
 def check_squares_around_king(king_square,board,colour):
     '''Returns a list of squares the opposing king is able to move to '''
     possible_squares = []
+    top_left_square = turn_notation_compatible(king_square)
+    top_left_square = str(top_left_square[0] - 1) + str(top_left_square[1] - 1) #se4ts the square to the top left square of the king
+
+    for row in range(top_left_square[1],top_left_square[0] + 3): #repeats 3 times for each row
+        for column in range(top_left_square[0],top_left_square[0] + 3): #scans a 3x3 area around the king
+            current_square = column + row
+            if squares_in_board([current_square]) == [current_square]: #means square is part of board
+                if colour == 'White':
+                    if check_piece_at_square(current_square,board) not in white_pieces:
+                        possible_squares.append(current_square)
+                else:
+                    if check_piece_at_square(current_square,board) not in black_pieces:
+                        possible_squares.append(current_square)
     #add all the squares around the king
     #remove all the squares outside the board
     #remove all the squares occupied by the piece of the same colour
+    test(possible_squares)
     return possible_squares
 '''Finish subroutines above here.'''
 def setup_players():
