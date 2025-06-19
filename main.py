@@ -357,7 +357,7 @@ def check_check(board, colour):
                         return True
                 elif piece == ('♔' if colour == 'White' else '♚'):
                     king_moves = check_squares_around_king(start_square, board, opponent_colour)
-                    if king_square in king_moves:
+                    if king_square in king_moves: 
                         return True
     return False
 
