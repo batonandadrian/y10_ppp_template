@@ -400,10 +400,17 @@ def find_king_pos(board,colour):
 def check_squares_around_king(king_square,board,colour):
     '''Returns a list of squares the opposing king is able to move to '''
     possible_squares = []
+    king_square = turn_notation_compatible(king_square)
+    king_column = king_square[0]
+    king_row = king_square[1]
     cases = [(-1,-1),(0,-1),(1,-1),
-             (-1,0),         (1,0),
+             (-1,0),'''KING'''(1,0),
              (-1,1), (0,1), (1,1)]
     #ITERATE THROUGH POSSIBLE CASES ABOVE
+    for case in cases:
+        case_column_offset = case[0]
+        case_row_offset = case[1]
+        possible_squares.append()
     top_left_square = turn_notation_compatible(king_square)
     top_left_square = int(str(int(top_left_square[0]) - 1) + str(int(top_left_square[1]) - 1)) #sets the square to the top left square of the king
 
