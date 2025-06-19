@@ -402,7 +402,8 @@ def check_squares_around_king(king_square,board,colour):
     possible_squares = []
     cases = [(-1,-1),(0,-1),(1,-1),
              (-1,0),         (1,0),
-             (-1,1)]
+             (-1,1), (0,1), (1,1)]
+    #ITERATE THROUGH POSSIBLE CASES ABOVE
     top_left_square = turn_notation_compatible(king_square)
     top_left_square = int(str(int(top_left_square[0]) - 1) + str(int(top_left_square[1]) - 1)) #sets the square to the top left square of the king
 
