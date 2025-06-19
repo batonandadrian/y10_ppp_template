@@ -325,6 +325,7 @@ def end_game(colour):
     pass
 
 def check_check(board, colour):
+    '''Checks for checks for a king'''
     if colour == 'White':
         king_symbol = '♚'
         opponent_pieces = black_pieces
@@ -339,7 +340,7 @@ def check_check(board, colour):
             piece = board[row_index][col_index]
             if piece in opponent_pieces:
                 start_square = chr(col_index + ord('a')) + str(8 - row_index)
-                if piece == ('♝' if colour == 'White' else '♗'):
+                if piece == ('♝' if colour == 'White' else '♗'): #more efficient, changes the colour of the piece depending on the colour on one line
                     if bishop_conditions(start_square, king_square, board, opponent_colour):
                         return True
                 elif piece == ('♜' if colour == 'White' else '♖'):
