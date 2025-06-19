@@ -324,34 +324,58 @@ def end_game(colour):
 
     pass
 
-def check_check(board,colour):
-    '''Checks if the current player is in check'''
-    black_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
-    white_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
-    #iterates through every piece on the board, checks the legal moves for each piece
-    #if the opposite coloured piece has a legal move to the king, the current player is in check
-    king_square = find_king_pos(board,colour)
-    for square in board:
-        if square != '.':
-            if colour == 'White': 
-                if check_piece_at_square == '♝':
-                    if bishop_conditions(square, king_square, board, colour) == True:
-                        pass
+def check_check(board, colour):
+    if colour == 'White':
+        king_symbol = '♚'
+        opponent_pieces = black_pieces
+        opponent_colour = 'Black'
+    else:
+        king_symbol = '♔'
+        opponent_pieces = white_pieces
+        opponent_colour = 'White'
+    king_square = find_king_pos(board, colour)
+    for row_index in range(8):
+        for col_index in range(8):
+            piece = board[row_index][col_index]
+            if piece in opponent_pieces:
+                start_square = chr(col_index + ord('a')) + str(8 - row_index)
+                if piece == ('♝' if colour == 'White' else '♗'):
+                    if bishop_conditions(start_square, king_square, board, opponent_colour):
+                        return True
+                elif piece == ('♜' if colour == 'White' else '♖'):
+                    if rook_conditions(start_square, king_square, board, opponent_colour):
+                        return True
+                elif piece == ('♛' if colour == 'White' else '♕'):
+                    if queen_conditions(start_square, king_square, board, opponent_colour):
+                        return True
+                elif piece == ('♞' if colour == 'White' else '♘'):
+                    if knight_conditions(start_square, king_square, board, opponent_colour):
+                        return True
+                elif piece == ('♙' if colour == 'White' else '♟'):
+                    if pawn_conditions(start_square, king_square, board, opponent_colour):
+                        return True
+                elif piece == ('♔' if colour == 'White' else '♚'):
+                    king_moves = check_squares_around_king(start_square, board, opponent_colour)
+                    if king_square in king_moves:
+                        return True
+    return False
 
-def checkmate(board,colour):
-    '''Checks if the current player is in checkmate'''
-    #iterates through every piece, checks if any piece is legally 'checking' the squares next to the king
-    #nested loop
-    #INCOMPLETE PSUEDOCODE
-    king_square = find_king_pos(colour)
-    available_squares = check_squares_around_king(king_square,board,colour)
-    for current_square in available_squares: #for each square around the king
-        for square in board:
-            if square != '.': #if square is empty
-                if colour == 'White':
-                    if square == '♝':
-                        if bishop_conditions(square, current_square, board, colour) == True: 
-                            pass #incomplete
+def checkmate(board, colour):
+    if not check_check(board, colour):
+        return False
+    king_square = find_king_pos(board, colour)
+    possible_moves = check_squares_around_king(king_square, board, colour)
+    if not possible_moves:
+        return True
+    for move in possible_moves:
+        temp_board = [row[:] for row in board]
+        temp_board = edit_square(move, check_piece_at_square(king_square, temp_board), temp_board)
+        temp_board = edit_square(king_square, '.', temp_board)
+        if not check_check(temp_board, colour):
+            return False
+    return True
+
+
 
 def find_king_pos(board,colour):
     '''Finds the square of the king on the board in chess notation'''
@@ -375,7 +399,7 @@ def find_king_pos(board,colour):
 def check_squares_around_king(king_square,board,colour):
     '''Returns a list of squares the opposing king is able to move to '''
     possible_squares = []
-    top_left_square = turn_notation_compatible(king_square)z
+    top_left_square = turn_notation_compatible(king_square)
     top_left_square = int(str(int(top_left_square[0]) - 1) + str(int(top_left_square[1]) - 1)) #sets the square to the top left square of the king
 
     for row in range(top_left_square[1],top_left_square[0] + 3): #repeats 3 times for each row
