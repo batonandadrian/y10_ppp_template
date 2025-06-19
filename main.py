@@ -103,6 +103,9 @@ def main():
         start_turn(colour, names, board)
         # #not going to work, needs an update_board() function
         colour = turn(colour)
+        king_pos = find_king_pos(board,colour)
+        test(f'King pos is {king_pos}')
+        check_squares_around_king(king_pos,board,colour)
         
 def clear():
     '''Clearing the screen'''
@@ -342,24 +345,29 @@ def checkmate(board,colour):
                             pass #incomplete
 
 def find_king_pos(board,colour):
-    '''Finds the square of the king on the board'''
+    '''Finds the square of the king on the board in chess notation'''
     #iterate through the board
     if colour == 'White':
         king = '♚'
     else:
         king = '♔'
-    location = ''
+    row_index = -1
+    column_index = -1
     for row in board:
+        row_index += 1
         for column in row:
+            column_index += 1
             if column == king:
-                location = column+row
+                location = reverse_notation(int(str(column_index) + str(row_index)))
+                location = location[0] + str(location[1])
+                test(f'Test is {location}')
     return location
 
 def check_squares_around_king(king_square,board,colour):
     '''Returns a list of squares the opposing king is able to move to '''
     possible_squares = []
-    top_left_square = turn_notation_compatible(king_square)
-    top_left_square = str(top_left_square[0] - 1) + str(top_left_square[1] - 1) #se4ts the square to the top left square of the king
+    top_left_square = turn_notation_compatible(king_square)z
+    top_left_square = int(str(int(top_left_square[0]) - 1) + str(int(top_left_square[1]) - 1)) #sets the square to the top left square of the king
 
     for row in range(top_left_square[1],top_left_square[0] + 3): #repeats 3 times for each row
         for column in range(top_left_square[0],top_left_square[0] + 3): #scans a 3x3 area around the king
