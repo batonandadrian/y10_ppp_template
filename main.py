@@ -22,8 +22,11 @@ TASKS (HIGH TO LOW PRIORITY):
     - If a square next to the king is being checked, that means the king cannot move there
   - If every single available square that the king can move to, AND the king is currently in check, it is a checkmate
 
-
-
+- LOGIC FOR CHECKING PIECES AROUND KING (CURRENTLY DOING)
+ - Having a list with tuples of stuff around the king:
+  - possible_squares = [(-1,-1),(0,-1),(1,-1),(-1,0)...] <- reflects this [topleft,topmiddle,topright...]
+   - Using for loops, iterating through all of them
+   - Then having a thing that adds it to compatible notation row and column  Eg. row += possible_squares[i][1] (changes the row according to the possible square cases)
 
 
 
@@ -35,6 +38,12 @@ TASKS (HIGH TO LOW PRIORITY):
     - Checking if any of those valid moves land on the square occupied by the king.
 - ADD turns (white move, black move) CORRECTLY [V]
 
+
+
+
+
+
+(ALL OPTIONAL)
 - Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
 - Possibly Checkmate
 - Illegal move error messages
