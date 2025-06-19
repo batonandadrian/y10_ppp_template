@@ -369,7 +369,7 @@ def checkmate(board, colour):
     if not possible_moves:
         return True
     for move in possible_moves:
-        temp_board = [row[:] for row in board]
+        temp_board = [row[:] for row in board] #creating a new 2d list, an iterating through it
         temp_board = edit_square(move, check_piece_at_square(king_square, temp_board), temp_board)
         temp_board = edit_square(king_square, '.', temp_board)
         if not check_check(temp_board, colour):
