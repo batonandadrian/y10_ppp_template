@@ -114,7 +114,8 @@ def main():
         colour = turn(colour)
         king_pos = find_king_pos(board,colour)
         test('VVVVVVVVVVVVVVVVVVVV')
-        check_squares_around_king(king_pos,board,colour)
+        test(f"{colour}'s king is in check? -> {check_check(board,colour)}")
+        test(f"{colour}'s king can move to {check_squares_around_king(king_pos,board,colour)}")
         
 def clear():
     '''Clearing the screen'''
@@ -306,12 +307,14 @@ def move(colour,names,board):
 
         return update_board(start_square,end_square,board)
 
-def check_piece_at_square(square, board):
+def check_piece_at_square(square, board, mode = 'default'):
     '''Returns the piece at the square when put into the format "letternumber" '''
     square_indices = turn_notation_compatible(square)  #convert square into usable notation
 
     row = square_indices[1]    # row index
     column = square_indices[0]  # column index
+    if mode == 'num':
+        return board[row][column]
     try:
         return board[row][column]  # returns the piece at row and column
     except IndexError:
@@ -329,22 +332,17 @@ def end_game(colour):
 
     pass
 
-def check_check(board, colour):
+def check_check(board, colour, specific_square = ''):
     '''Checks for checks for a king'''
-    if colour == 'White':
-        king_symbol = '♚'
-        opponent_pieces = black_pieces
-        opponent_colour = 'Black'
-    else:
-        king_symbol = '♔'
-        opponent_pieces = white_pieces
-        opponent_colour = 'White'
-    king_square = find_king_pos(board, colour)
-    for row_index in range(8):
-        for col_index in range(8):
-            piece = board[row_index][col_index]
+    king_square = find_king_pos(board,colour)
+    opponent_pieces = white_pieces if colour == 'Black' else black_pieces #makes the opponent pieces white if the colour is black to detect cheques
+    opponent_colour = 'Black' if colour == 'White' else 'White'
+    for row in range(8):
+        for column in range(8):
+            square = int(str(column)+str(row))
+            piece = check_piece_at_square(square,board,'num')
+            start_square = reverse_notation(square)
             if piece in opponent_pieces:
-                start_square = chr(col_index + ord('a')) + str(8 - row_index)
                 if piece == ('♝' if colour == 'White' else '♗'): #more efficient, changes the colour of the piece depending on the colour on one line
                     if bishop_conditions(start_square, king_square, board, opponent_colour):
                         return True
@@ -360,26 +358,26 @@ def check_check(board, colour):
                 elif piece == ('♙' if colour == 'White' else '♟'):
                     if pawn_conditions(start_square, king_square, board, opponent_colour):
                         return True
-                elif piece == ('♔' if colour == 'White' else '♚'):
-                    king_moves = check_squares_around_king(start_square, board, opponent_colour)
-
-    return False
-
+    return False #returns false if no check found
+    
 def checkmate(board, colour):
-    if not check_check(board, colour):
+    if check_check(board,colour) == False: #if the king is not already in check
         return False
-    king_square = find_king_pos(board, colour)
-    possible_moves = check_squares_around_king(king_square, board, colour)
-    if not possible_moves: #if len is 0 (no more posssible moves)
-        return True
-    #may have to change code below? errors
-    for move in possible_moves:
-        temp_board = [row[:] for row in board] #creating a new 2d list, an iterating through it
-        temp_board = edit_square(move, check_piece_at_square(king_square, temp_board), temp_board)
-        temp_board = edit_square(king_square, '.', temp_board)
-        if not check_check(temp_board, colour):
-            return False
-    return True
+    
+    # if not check_check(board, colour):
+    #     return False
+    # king_square = find_king_pos(board, colour)
+    # possible_moves = check_squares_around_king(king_square, board, colour)
+    # if not possible_moves: #if len is 0 (no more posssible moves)
+    #     return True
+    # #may have to change code below? errors
+    # for move in possible_moves:
+    #     temp_board = [row[:] for row in board] #creating a new 2d list, an iterating through it
+    #     temp_board = edit_square(move, check_piece_at_square(king_square, temp_board), temp_board)
+    #     temp_board = edit_square(king_square, '.', temp_board)
+    #     if not check_check(temp_board, colour):
+    #         return False
+    # return True
 
 
 
