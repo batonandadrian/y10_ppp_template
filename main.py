@@ -423,6 +423,8 @@ def check_squares_around_king(king_square,board,colour):
         possible_squares.append(current_square)
     squares_around_king = []
     for square in possible_squares:
+        if check_check(board,colour,square) == True:
+            continue
         if len(square) == 2:
             try:
                 if [reverse_notation(square)] == squares_in_board(reverse_notation(square)):
