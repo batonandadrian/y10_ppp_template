@@ -372,6 +372,7 @@ def checkmate(board, colour):
     possible_moves = check_squares_around_king(king_square, board, colour)
     if not possible_moves: #if len is 0 (no more posssible moves)
         return True
+    #may have to change code below? errors
     for move in possible_moves:
         temp_board = [row[:] for row in board] #creating a new 2d list, an iterating through it
         temp_board = edit_square(move, check_piece_at_square(king_square, temp_board), temp_board)
