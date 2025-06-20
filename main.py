@@ -236,6 +236,10 @@ def move(colour,names,board):
             start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
             print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
             end_square = input(f'Where is your end square, {names[1]}?\n').lower()
+            while len(start_square) != 2 or len(end_square) != 2:
+                start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
+                print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
+                end_square = input(f'Where is your end square, {names[1]}?\n').lower()
             test(check_piece_at_square(start_square,board))
             test(check_piece_at_square(end_square,board))
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
