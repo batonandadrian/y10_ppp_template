@@ -341,8 +341,11 @@ def check_check(board, colour, specific_square = 'empty'):
     for row in range(8):
         for column in range(8):
             square = int(str(column)+str(row))
-            piece = check_piece_at_square(square,board,'num')
+            test(f'Square is {square}')
+            piece = board
+
             start_square = reverse_notation(square)
+            test(f'Square is {square}')
             if piece in opponent_pieces:
                 if piece == ('♝' if colour == 'White' else '♗'): #more efficient, changes the colour of the piece depending on the colour on one line
                     if bishop_conditions(start_square, use_square, board, opponent_colour):
