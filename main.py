@@ -113,7 +113,7 @@ def main():
         # #not going to work, needs an update_board() function
         colour = turn(colour)
         king_pos = find_king_pos(board,colour)
-        test(f'King pos is {king_pos}')
+        test('VVVVVVVVVVVVVVVVVVVV')
         check_squares_around_king(king_pos,board,colour)
         
 def clear():
@@ -240,6 +240,7 @@ def move(colour,names,board):
                 start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
                 print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
                 end_square = input(f'Where is your end square, {names[1]}?\n').lower()
+                
             test(check_piece_at_square(start_square,board))
             test(check_piece_at_square(end_square,board))
             '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
