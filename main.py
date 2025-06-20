@@ -362,8 +362,7 @@ def check_check(board, colour):
                         return True
                 elif piece == ('♔' if colour == 'White' else '♚'):
                     king_moves = check_squares_around_king(start_square, board, opponent_colour)
-                    if king_square in king_moves: 
-                        return True
+
     return False
 
 def checkmate(board, colour):
@@ -371,7 +370,7 @@ def checkmate(board, colour):
         return False
     king_square = find_king_pos(board, colour)
     possible_moves = check_squares_around_king(king_square, board, colour)
-    if not possible_moves:
+    if not possible_moves: #if len is 0 (no more posssible moves)
         return True
     for move in possible_moves:
         temp_board = [row[:] for row in board] #creating a new 2d list, an iterating through it
