@@ -329,7 +329,6 @@ def edit_square(square,piece,board):
 '''Finish subroutines below here.'''
 def end_game(colour):
     '''The game ends when someone is checkmated'''
-
     pass
 
 def check_check(board, colour, specific_square = 'empty'):
@@ -344,7 +343,6 @@ def check_check(board, colour, specific_square = 'empty'):
             test('0' + '0')
             test(f'Square is {square},   {str(column)},   {str(row)}')
             piece = board[column][row]
-
             start_square = reverse_notation(square)
             test(f'Square is {square}')
             if piece in opponent_pieces:
