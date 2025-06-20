@@ -340,7 +340,8 @@ def check_check(board, colour, specific_square = 'empty'):
     opponent_colour = 'Black' if colour == 'White' else 'White'
     for row in range(8):
         for column in range(8):
-            square = int(str(column)+str(row))
+            square = str(column)+str(row)
+            test('0' + '0')
             test(f'Square is {square},   {str(column)},   {str(row)}')
             piece = board[column][row]
 
