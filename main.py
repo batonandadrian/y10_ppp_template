@@ -332,9 +332,10 @@ def end_game(colour):
 
     pass
 
-def check_check(board, colour, specific_square = ''):
+def check_check(board, colour, specific_square = 'empty'):
     '''Checks for checks for a king'''
     king_square = find_king_pos(board,colour)
+    use_square = king_square if specific_square == 'empty' else specific_square
     opponent_pieces = white_pieces if colour == 'Black' else black_pieces #makes the opponent pieces white if the colour is black to detect cheques
     opponent_colour = 'Black' if colour == 'White' else 'White'
     for row in range(8):
@@ -344,26 +345,31 @@ def check_check(board, colour, specific_square = ''):
             start_square = reverse_notation(square)
             if piece in opponent_pieces:
                 if piece == ('♝' if colour == 'White' else '♗'): #more efficient, changes the colour of the piece depending on the colour on one line
-                    if bishop_conditions(start_square, king_square, board, opponent_colour):
+                    if bishop_conditions(start_square, use_square, board, opponent_colour):
                         return True
                 elif piece == ('♜' if colour == 'White' else '♖'):
-                    if rook_conditions(start_square, king_square, board, opponent_colour):
+                    if rook_conditions(start_square, use_square, board, opponent_colour):
                         return True
                 elif piece == ('♛' if colour == 'White' else '♕'):
-                    if queen_conditions(start_square, king_square, board, opponent_colour):
+                    if queen_conditions(start_square, use_square, board, opponent_colour):
                         return True
                 elif piece == ('♞' if colour == 'White' else '♘'):
-                    if knight_conditions(start_square, king_square, board, opponent_colour):
+                    if knight_conditions(start_square, use_square, board, opponent_colour):
                         return True
                 elif piece == ('♙' if colour == 'White' else '♟'):
-                    if pawn_conditions(start_square, king_square, board, opponent_colour):
+                    if pawn_conditions(start_square, use_square, board, opponent_colour):
                         return True
     return False #returns false if no check found
     
 def checkmate(board, colour):
     if check_check(board,colour) == False: #if the king is not already in check
         return False
-    
+    king_square = find_king_pos(board,colour)
+    possible_moves = check_squares_around_king(king_square, board, colour)
+
+    if possible_moves == []:
+        return True
+    return False
     # if not check_check(board, colour):
     #     return False
     # king_square = find_king_pos(board, colour)
