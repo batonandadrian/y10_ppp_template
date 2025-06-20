@@ -341,7 +341,7 @@ def check_check(board, colour, specific_square = 'empty'):
     for row in range(8):
         for column in range(8):
             square = int(str(column)+str(row))
-            test(f'Square is {square}')
+            test(f'Square is {square},   {str(column)},   {str(row)}')
             piece = board[column][row]
 
             start_square = reverse_notation(square)
