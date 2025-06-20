@@ -404,26 +404,23 @@ def check_squares_around_king(king_square,board,colour):
     king_column = king_square[0]
     king_row = king_square[1]
     cases = [(-1,-1),(0,-1),(1,-1),
-             (-1,0),'''KING'''(1,0),
+             (-1,0),         (1,0),
              (-1,1), (0,1), (1,1)]
     #ITERATE THROUGH POSSIBLE CASES ABOVE
     for case in cases:
         case_column_offset = case[0]
         case_row_offset = case[1]
-        possible_squares.append()
-    top_left_square = turn_notation_compatible(king_square)
-    top_left_square = int(str(int(top_left_square[0]) - 1) + str(int(top_left_square[1]) - 1)) #sets the square to the top left square of the king
-
-    for row in range(top_left_square[1],top_left_square[0] + 3): #repeats 3 times for each row
-        for column in range(top_left_square[0],top_left_square[0] + 3): #scans a 3x3 area around the king
-            current_square = column + row
-            if squares_in_board([current_square]) == [current_square]: #means square is part of board
-                if colour == 'White':
-                    if check_piece_at_square(current_square,board) not in white_pieces:
-                        possible_squares.append(current_square)
-                else:
-                    if check_piece_at_square(current_square,board) not in black_pieces:
-                        possible_squares.append(current_square)
+        current_square = str(king_column+case_column_offset) + str(king_row + case_row_offset)
+        possible_squares.append(current_square)
+    squares_around_king = []
+    for square in possible_squares:
+        if len(square) == 2:
+            try:
+                if [reverse_notation(square)] == squares_in_board(reverse_notation(square)):
+                    squares_around_king.append(square)
+            except:
+                continue
+    
     #add all the squares around the king
     #remove all the squares outside the board
     #remove all the squares occupied by the piece of the same colour
