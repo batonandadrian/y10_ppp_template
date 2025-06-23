@@ -1,10 +1,11 @@
-# testing
+# debug_printing
 # Chess 960
 import random
 from colorama import Fore, Back, Style
 import os
-#print(Fore.RED + 'This text is red in color')
+from time import sleep
 # Default to empty board
+
 '''
 TASKS (HIGH TO LOW PRIORITY):
 - Finish CHECK and CHECKMATE
@@ -28,8 +29,6 @@ TASKS (HIGH TO LOW PRIORITY):
    - Using for loops, iterating through all of them
    - Then having a thing that adds it to compatible notation row and column  Eg. row += possible_squares[i][1] (changes the row according to the possible square cases)
 
-
-
 - ALL Chess Features
   - EN PASSANT
   - CASTLING (CHECK pieces in between, move rook 2 squares and king 2 squares)
@@ -37,11 +36,6 @@ TASKS (HIGH TO LOW PRIORITY):
     - Determining the valid moves for each opponent's piece.
     - Checking if any of those valid moves land on the square occupied by the king.
 - ADD turns (white move, black move) CORRECTLY [V]
-
-
-
-
-
 
 (ALL OPTIONAL)
 - Message when you are in check (by checking if the last move put you in check (discovered checks etc wouldn't fit))
@@ -52,864 +46,856 @@ TASKS (HIGH TO LOW PRIORITY):
 - IMPROVE quality (having better print messages, showing which piece you want to move when you get the square of it)
 - ADD toggleable clocks for each side (maybe not)
 - ADD settings (settings to toggle clocks, time for each side, highlight possible squares, background colour)
-- POLISH and remove test messages once done
+- POLISH and remove debug_print messages once done
 '''
 
 '''
 COMPLETED:
 - restrictions for all pieces (except king)
 - movement system
-
+- turn system
+- proper moves for king
 '''
 
 '''
 BUGS NEEDED TO FIX:
-fix try and except for user inputs
+index errors
 '''
-#git stage *
-#git commit -m "message"
-#git push
+EMPTY_SQUARE = '.'
+colour_record = []
 
-black_pieces = ['♔', '♕', '♖', '♗', '♘', '♙']
-white_pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+def cool_print(text = '', mode = 'Non-input'):
+    for letter in text:
+        print(letter, end="", flush=True) #makes sure it prints immediately after letter is made
+        sleep(0.015) #how fast the text is printed (ideally a lower number (roughly 0.01 - 0.2))
+    if mode == 'Input':
+        return input()
+    print()
+    
+def separator(text, mode = 'On'):
+    '''Prints a separator after printing some text'''
+    separator_text = ('-' * len(text)) if len(text) <= 50 else ('-' * 50)
+    cool_print(Fore.YELLOW + separator_text + Style.RESET_ALL)
+    if mode == 'On':
+        cool_print(text)
+
+def choose_theme():
+    """Prompt the user for light/dark mode and return the correct symbol sets."""
+    mode = ''
+    while mode not in ('light','dark'):
+        separator('None', 'Off')
+        mode = cool_print('Are you using (light) mode or (dark) mode in GitHub right now?\n', 'Input').strip().lower()
+    if mode == 'light':
+        # “normal” mapping
+        return (['♔','♕','♖','♗','♘','♙'],  # white actually rendered light
+                ['♚','♛','♜','♝','♞','♟'])  # black actually rendered dark
+    else:
+        # dark mode: swap symbols so that the pieces that look white on dark bg
+        # still function as White, and vice versa
+        return (['♚','♛','♜','♝','♞','♟'],  # those that look white on dark bg
+                ['♔','♕','♖','♗','♘','♙'])  # those that look black on dark bg
+
+white_piece_symbols, black_piece_symbols = choose_theme()
+
+white_pieces = white_piece_symbols[:]
+black_pieces = black_piece_symbols[:]
 
 def main():
-    '''Opens up the menu'''
-    names = ['', '']
-    board = [['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.']]
-
-    #board[0] is row 8 and board[-1] is row 1
+    """Opens the menu and runs the main game loop."""
+    separator('None', 'Off')
+    cool_print(Fore.RED + 'Notes:\n The following Chess960 game is not' + Style.BRIGHT + ' complete, ' + Style.NORMAL + 'and may contain syntax, logical or runtime errors.' + Style.RESET_ALL)
+    cool_print(Fore.RED + ' Castling, en passant, draws, check and checkmate are all' + Style.BRIGHT + ' not, ' + Style.NORMAL + 'fully done.' + Style.RESET_ALL)
+    cool_print(Fore.RED + ' It is highly recommended that you adjust your' + Style.BRIGHT + ' terminal size, ' + Style.NORMAL + 'to improve the experience.' + Style.RESET_ALL)
+    cool_print(Fore.RED + ' Some' + Style.BRIGHT + ' "testing messages" ' + Style.NORMAL + 'may still exist. You can ignore them.' + Style.RESET_ALL)
+    player_names = ['', '']  # [White_name, Black_name]
+    game_board   = [[' '] * 8 for _ in range(8)]
     
-
-
-
-    #TESTING
-    
-    
-
-
-
-    menu_result = menu()
-    if menu_result == '1':
+    menu_choice = menu()
+    if menu_choice == '1':
         instructions()
-        menu_result = menu()
-    elif menu_result == '2':
-        names = setup_players()
-        board = setup_board()
+        menu_choice = menu()
+    if menu_choice == '2':
+        player_names = setup_players()
+        game_board   = setup_board()
 
-    '''Starts with white's turn'''
-    game_in_progress = True
-    #while the game hasn't ended, repeat turns
-    colour = 'White'
-    while game_in_progress:
-        start_turn(colour, names, board)
-        # #not going to work, needs an update_board() function
-        colour = turn(colour)
-        king_pos = find_king_pos(board,colour)
-        test('VVVVVVVVVVVVVVVVVVVV')
-        test(f"{colour}'s king is in check? -> {check_check(board,colour)}")
-        test(f"{colour}'s king can move to {check_squares_around_king(king_pos,board,colour)}")
-        
+    game_active         = True
+    current_player_colour = 'White'
+    while game_active:
+        clear()
+        game_board = start_turn(current_player_colour, player_names, game_board, 'No Print')
+        current_player_colour = turn(current_player_colour)
+        king_square           = find_king_pos(game_board, current_player_colour)
+        debug_cool_print(f"{current_player_colour}'s king is in check? -> "
+             f"{is_in_check(game_board, current_player_colour)}")
+        debug_cool_print(f"{current_player_colour}'s king can move to "
+             f"{check_squares_around_king(king_square, game_board, current_player_colour)}")
+        clear()
+
 def clear():
-    '''Clearing the screen'''
-    os.system('clear')
+    """Clears the terminal screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def instructions():
-    '''Displays instructions - Checks for which type of thing the user needs help on'''
+    """Displays instructions; prompts which part to explain."""
     clear()
-    instruct_result = int(input('Which part of the game would you like to know more? \n1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n10. Losses \n11. Draws \n'))
-    while instruct_result not in [1,2,3,4,5,6,7,8,9,10,11]:
-        instruct_result = int(input('Which part of the game would you like to know more? \n1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n10. Losses \n11. Draws \n'))
-    if instruct_result == '1':
-        pass
-        #WORK IN PROGRESS
-        #NOT A PRIORITY TO BE WORKED ON
+    selected_section = -1 #makes it out of range at first
+    while selected_section not in range(1, 12):
+        try:
+            separator('None', 'Off')
+            selected_section = int(cool_print(
+                'Which part of the game would you like to know more? \n'
+                '1. Pawn \n2. Rook \n3. King \n4. Knight \n5. Queen \n'
+                '6. Bishop \n7. Legal Moves \n8. Castling \n9. Wins \n'
+                '10. Losses \n11. Draws \n','Input'
+            )) 
+        except ValueError:
+            cool_print(Fore.RED + "Please enter a number from 1 to 11 only." + Style.RESET_ALL)
 
-def turn(colour_of_turn):
-    '''Makes the turn to the opposite player, allows the opposite player to move and disallows the player who moved to move on the opponent's turn'''
-    if colour_of_turn == 'Black':
-        colour_of_turn = 'White'
+    if selected_section == 1:
+        cool_print("Pawns move forward one square, or two squares from their starting row. "
+              "They capture diagonally.")
+        cool_print("Press enter to return to the menu.", 'Input')
     else:
-        colour_of_turn = 'Black'
-    return colour_of_turn
+        cool_print('Instructions are not yet complete.')
+def menu():
+    """Shows the main menu and returns the user's choice ('1' or '2')."""
+    choice = ''
+    while choice not in ['1', '2']:
+        try:
+            separator('None', 'Off')
+            choice = cool_print(
+                'Welcome to Chess 960!\n'
+                '1. Open instructions\n'
+                '2. Start new game\n'
+                'Enter what you want to do: ','Input'
+            )
+        except:
+            separator('None','Off')
+            cool_print(Fore.RED + "Invalid input. Please type 1 or 2." + Style.RESET_ALL)
+            # cool_print(Fore.RED + "Invalid input. Please type 1 or 2." + Style.RESET_ALL)
+    return choice
 
-def start_turn(colour,names,board):
-    '''Tells the player of the turn that it is their turn to make a move. Calls move() so that they can start selecting a move'''
-    if colour == 'White':
-        print(f'{names[0]}, it is your turn to make a move.')
+def setup_players():
+    """Prompts both players for their names and returns [White_name, Black_name]."""
+    separator('None', 'Off')
+    cool_print("Let's play!")
+    while True:
+        try:
+            separator('None', 'Off')
+            white_name = cool_print('Player 1 (White), enter your name:\n','Input').strip()
+            black_name = cool_print('Player 2 (Black), enter your name:\n','Input').strip()
+            if white_name and black_name:
+                return [white_name, black_name]
+            else:
+                separator('None', 'Off')
+                cool_print(Fore.RED + "Both names are required." + Style.RESET_ALL)
+        except:
+            separator('None', 'Off')
+            cool_print(Fore.RED + "Error with input. Try again." + Style.RESET_ALL)
+
+def turn(current_colour):
+    """Switches the turn between 'White' and 'Black'."""
+    return 'White' if current_colour == 'Black' else 'Black'
+
+def start_turn(player_colour, player_names, game_board, mode = 'Some'):
+    """Tells the player it’s their turn, then returns the updated board."""
+    if mode == 'No Print':
+        return move(player_colour, player_names, game_board)
+    if player_colour == 'White':
+        separator('None', 'Off')
+        cool_print(f"{player_names[0]}, it is your turn to move.")
     else:
-        print(f'{names[1]}, it is your turn to make a move.')
-    move(colour,names,board)
-
-def move(colour,names,board):
-    '''Checks if their move is possible and moves it if it is'''
-    if colour == 'White': #conditions for white
-        conditions_met = False
-        while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
-            display_board(board)
-            test('white')
-            start_square = input(f'Where is your starting square, {names[0]}?\n').lower()
-            print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
-            end_square = input(f'Where is your end square, {names[0]}?\n').lower()
-            test(check_piece_at_square(start_square,board))
-            test(check_piece_at_square(end_square,board))
-            '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-            # used to skip legal moves while it is not finished
-            #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
-            '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-            
-            
-            if check_piece_at_square(start_square,board) == '♚': #if the piece being moved is a king
-                if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-            elif check_piece_at_square(start_square,board) == '♜':
-                if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-
-            elif check_piece_at_square(start_square,board) == '♟':
-                if pawn_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-                    
-            elif check_piece_at_square(start_square,board) == '♞':
-                if knight_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-
-            elif check_piece_at_square(start_square,board) == '♝':
-                if bishop_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The bishop could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-
-            elif check_piece_at_square(start_square,board) == '♛':
-                if queen_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-
-            if conditions_met == True: #if piece specific legal conditions are met
-                #checks for more things
-                if no_move_check(start_square,end_square) == False:
-                    print(Back.BLUE + Fore.WHITE + f'Stop trying to move your {check_piece_at_square(start_square, board)}  from {start_square} to {end_square}!' + Style.RESET_ALL)
-                    conditions_met = False
-                    display_board(board)
-                elif check_piece_at_square(end_square,board) in white_pieces: #prints illegal move message if move pattern is legal but self capturing
-                    print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
-                    conditions_met = False
-                    display_board(board)
-                
-            if check_check(board,colour): #check if its own king in check
-                if checkmate(board,colour):
-                    end_game()
-                
-            if opposite_turn_movement(start_square,board,colour) == False:
-                conditions_met = False
-
-        test('board update')
-        return update_board(start_square,end_square,board)
+        separator('None', 'Off')
+        cool_print(f"{player_names[1]}, it is your turn to move.")
+    # *** return the result of move() ***
+    if mode == 'None':
+        return None # For printing the names
     
-    else: #conditions for black
-        test('black')
-        conditions_met = False
-        while conditions_met == False:  #repeatedly asks user squares until all the requirements are fulfilled
-            test('black')
-            display_board(board)
-            start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
-            print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
-            end_square = input(f'Where is your end square, {names[1]}?\n').lower()
-            while len(start_square) != 2 or len(end_square) != 2:
-                start_square = input(f'Where is your starting square, {names[1]}?\n').lower()
-                print(f'I see you are trying to move the {check_piece_at_square(start_square,board)}  on {start_square}.')
-                end_square = input(f'Where is your end square, {names[1]}?\n').lower()
+    return move(player_colour, player_names, game_board) # Not needed all the time
+
+
+def move(player_colour, player_names, game_board):
+    """Handles input, validates and performs a move, and checks for checkmate."""
+    move_successful = False
+    colour_record.append(player_colour)
+    # * * * legal moves * * *
+    while not move_successful:
+        try:
+            if colour_record[-1] != player_colour: #This part may be buggy
+                clear() #BUGGY ! MAY BE REMOVED
+        except: # Don't clear if not new turn
+            continue #BUGGY! MAY BE REMOVED
+        start_turn(player_colour,player_names,game_board, 'None')
+        display_board(game_board)
+
+        # Safely read squares, breaking out when done
+        while True:
+            try:
+                separator('None', 'Off')
+                starting_square = cool_print(f"Enter starting square ({player_colour}): ",'Input').lower().strip()
+                ending_square   = cool_print(f"Enter ending square   ({player_colour}): ",'Input').lower().strip()
+                if len(starting_square)==2 and len(ending_square)==2:
+                    break
+                raise ValueError
+            except ValueError:
+                separator('None', 'Off')
+                cool_print(Fore.RED + "Enter squares like 'e2', 'd4' only." + Style.RESET_ALL)
+
+        moving_piece = get_piece_at(starting_square, game_board)
+        target_piece = get_piece_at(ending_square,   game_board)
+        debug_cool_print(f"{starting_square} -> {ending_square}: {moving_piece} to {target_piece}")
+
+        # —— NEW GUARD: must pick your own piece ——  #opponent moves prevention (based on light or dark mode)
+        own_set = white_piece_symbols if player_colour=='White' else black_piece_symbols #own set of pieces
+        if moving_piece == EMPTY_SQUARE:
+            separator('None', 'Off')
+            cool_print(Fore.YELLOW + "You must select a piece to move!" + Style.RESET_ALL)
+            continue
+        if moving_piece not in own_set:
+            separator('None', 'Off')
+            cool_print(Fore.YELLOW + "You cannot move your opponent’s pieces!" + Style.RESET_ALL)
+            continue
+        # —— end new guard ——
+        # Basic legality
+        if not is_not_moving(starting_square, ending_square):
+            separator('None', 'Off')
+            cool_print(Back.BLUE + Fore.WHITE + "You must move to a different square!" + Style.RESET_ALL)
+            continue
+        if (player_colour=='White' and target_piece in white_piece_symbols) \
+        or (player_colour=='Black' and target_piece in black_piece_symbols):
+            separator('None', 'Off')
+            cool_print(Fore.YELLOW + f"{moving_piece} cannot capture its own color!" + Style.RESET_ALL)
+            continue
+        
+        # Shape validation
+        if moving_piece in ['♟','♙']:
+            if not validate_pawn_move(starting_square, ending_square, game_board, player_colour):
+                separator('None', 'Off')
+                cool_print(Fore.YELLOW + "Illegal pawn move!" + Style.RESET_ALL)
+                continue
+        elif moving_piece in ['♞','♘']:
+            if not validate_knight_move(starting_square, ending_square, game_board, player_colour):
+                separator('None', 'Off')
+                cool_print(Fore.YELLOW + "Illegal knight move!" + Style.RESET_ALL)
+                continue
+        elif moving_piece in ['♜','♖']:
+            if not validate_rook_move(starting_square, ending_square, game_board, player_colour):
+                separator('None', 'Off')
+                cool_print(Fore.YELLOW + "Illegal rook move!" + Style.RESET_ALL)
+                continue
+        elif moving_piece in ['♝','♗']:
+            if not validate_bishop_move(starting_square, ending_square, game_board, player_colour):
+                separator('None', 'Off')
+                cool_print(Fore.YELLOW + "Illegal bishop move!" + Style.RESET_ALL)
+                continue
+        elif moving_piece in ['♛','♕']:
+            if not validate_queen_move(starting_square, ending_square, game_board, player_colour):
+                separator('None', 'Off')
+                cool_print(Fore.YELLOW + "Illegal queen move!" + Style.RESET_ALL)
+                continue
+        elif moving_piece in ['♚','♔']:
+            if not validate_king_move(starting_square, ending_square, game_board, player_colour):
+                separator('None', 'Off')
+                cool_print(Fore.YELLOW + "Illegal king move!" + Style.RESET_ALL)
+                continue
                 
-            test(check_piece_at_square(start_square,board))
-            test(check_piece_at_square(end_square,board))
-            '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-            # used to skip legal moves while it is not finished
-            #conditions_met = True # TESTING PURPOSES ONLY !!! REMOVE AT THE END!!!!
-            '''!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'''
-            
-            
-            if check_piece_at_square(start_square,board) == '♔': #if the piece being moved is a king
-                if king_conditions(start_square,end_square,board,colour) == True: #if move is legal and checked
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The king could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-            elif check_piece_at_square(start_square,board) == '♖':
-                if rook_conditions(start_square,end_square,board,colour) == True: #if rook moves are checked and legal
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The rook could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+        # Simulate and check self-check
+        simulated_board = [row[:] for row in game_board]
+        simulated_board = set_piece_at(ending_square, moving_piece, simulated_board)
+        simulated_board = set_piece_at(starting_square,  EMPTY_SQUARE,         simulated_board)
+        if is_in_check(simulated_board, player_colour):
+            separator('None', 'Off')
+            cool_print(Fore.RED + "Move puts your king in check!" + Style.RESET_ALL)
+            continue
 
-            elif check_piece_at_square(start_square,board) == '♙':
-                if pawn_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The pawn could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
-                    
-            elif check_piece_at_square(start_square,board) == '♘':
-                if knight_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The knight could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+        # Perform the move
+        game_board = update_board(starting_square, ending_square, game_board)
+        move_successful = True
 
-            elif check_piece_at_square(start_square,board) == '♗':
-                if bishop_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The bishop could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+        # Check for checkmate
+        if is_in_check(game_board, player_colour) and checkmate(game_board, player_colour):
+            separator('None', 'Off')
+            cool_print(Fore.RED + Style.BRIGHT + f"{player_colour} has been checkmated!" + Style.RESET_ALL)
+            end_game(player_colour)
 
-            elif check_piece_at_square(start_square,board) == '♕':
-                if queen_conditions(start_square,end_square,board,colour) == True:
-                    conditions_met = True
-                else:
-                    print(Back.BLUE + Fore.BLACK + f'The queen could not move to {end_square}.' + Style.RESET_ALL)
-                    display_board(board)
+    return game_board
 
-            if conditions_met == True: #if piece specific legal conditions are met
-                #checks for more things
-                if no_move_check(start_square,end_square) == False:
-                    print(Back.BLUE + Fore.WHITE + f'Stop trying to move your {check_piece_at_square(start_square, board)}  from {start_square} to {end_square}!' + Style.RESET_ALL)
-                    conditions_met = False
-                    display_board(board)
-                elif check_piece_at_square(end_square,board) in black_pieces: #prints illegal move message if move pattern is legal but self capturing
-                    print(Back.BLUE + Fore.WHITE + f'Why is your {check_piece_at_square(start_square, board)}  trying to capture your own {check_piece_at_square(end_square,board)}  at {end_square}?' + Style.RESET_ALL)
-                    conditions_met = False
-                    display_board(board)
-            
-            if opposite_turn_movement(start_square,board,colour) == False:
-                conditions_met = False
+def update_board(from_square, to_square, game_board):
+    """Moves a piece from from_square to to_square and returns the board."""
+    moving_piece = get_piece_at(from_square, game_board)
+    game_board   = set_piece_at(to_square,   moving_piece, game_board)
+    game_board   = set_piece_at(from_square, EMPTY_SQUARE,         game_board)
+    return game_board
 
-        return update_board(start_square,end_square,board)
+def check_squares_around_king(king_square, game_board, player_colour):
+    """
+    Returns a list of legal squares the king can move to (no check, no friendly).
+    """
+    legal_squares    = []
+    king_col_index, king_row_index = notation_to_indices(king_square)
+    friendly_set     = white_piece_symbols if player_colour=='White' else black_piece_symbols
 
-def check_piece_at_square(square, board, mode = 'default'):
-    '''Returns the piece at the square when put into the format "letternumber" '''
-    square_indices = turn_notation_compatible(square)  #convert square into usable notation
+    for delta_col, delta_row in [(-1,-1),(0,-1),(1,-1), #delta means change (change incolumn and row)
+                                 (-1, 0),       (1,  0), #iterating through 2 things at the same time
+                                 (-1, 1),(0, 1),(1,  1)]:
+        new_col = king_col_index + delta_col
+        new_row = king_row_index + delta_row
+        if not (0 <= new_col < 8 and 0 <= new_row < 8):
+            continue
 
-    row = square_indices[1]    # row index
-    column = square_indices[0]  # column index
-    if mode == 'num':
-        return board[row][column]
-    try:
-        return board[row][column]  # returns the piece at row and column
-    except IndexError:
-        print(f'Row was {row}, column was {column}')
+        adjacent_square = indices_to_notation(new_col, new_row)
+        if get_piece_at(adjacent_square, game_board) in friendly_set:
+            continue
 
-def edit_square(square,piece,board):
-    '''Changes the piece at the square when put into the format  "letternumber" '''
-    square = turn_notation_compatible(square)
-    board[square[1]][square[0]] = piece #changing the piece at the square
-    return board
+        # simulate king move
+        simulated_board = [row[:] for row in game_board]
+        simulated_board = set_piece_at(adjacent_square,
+                                      get_piece_at(king_square, game_board),
+                                      simulated_board)
+        simulated_board = set_piece_at(king_square, EMPTY_SQUARE, simulated_board)
+        if not is_in_check(simulated_board, player_colour):
+            legal_squares.append(adjacent_square)
 
-'''Finish subroutines below here.'''
-def end_game(colour):
-    '''The game ends when someone is checkmated'''
-    pass
+    return legal_squares
 
-def check_check(board, colour, specific_square = 'empty'):
-    '''Checks for checks for a king'''
-    king_square = find_king_pos(board,colour)
-    use_square = king_square if specific_square == 'empty' else specific_square
-    opponent_pieces = white_pieces if colour == 'Black' else black_pieces #makes the opponent pieces white if the colour is black to detect cheques
-    opponent_colour = 'Black' if colour == 'White' else 'White'
-    for row in range(8):
-        for column in range(8):
-            square = str(column)+str(row)
-            test('0' + '0')
-            test(f'Square is {square},   {str(column)},   {str(row)}')
-            piece = board[column][row]
-            start_square = reverse_notation(square)
-            test(f'Square is {square}')
-            if piece in opponent_pieces:
-                if piece == ('♝' if colour == 'White' else '♗'): #more efficient, changes the colour of the piece depending on the colour on one line
-                    if bishop_conditions(start_square, use_square, board, opponent_colour):
-                        return True
-                elif piece == ('♜' if colour == 'White' else '♖'):
-                    if rook_conditions(start_square, use_square, board, opponent_colour):
-                        return True
-                elif piece == ('♛' if colour == 'White' else '♕'):
-                    if queen_conditions(start_square, use_square, board, opponent_colour):
-                        return True
-                elif piece == ('♞' if colour == 'White' else '♘'):
-                    if knight_conditions(start_square, use_square, board, opponent_colour):
-                        return True
-                elif piece == ('♙' if colour == 'White' else '♟'):
-                    if pawn_conditions(start_square, use_square, board, opponent_colour):
-                        return True
-    return False #returns false if no check found
-    
-def checkmate(board, colour):
-    if check_check(board,colour) == False: #if the king is not already in check
+def checkmate(game_board, player_colour):
+    """Returns True if player_colour’s king has no legal escape and is in check."""
+    if not is_in_check(game_board, player_colour):
         return False
-    king_square = find_king_pos(board,colour)
-    possible_moves = check_squares_around_king(king_square, board, colour)
 
-    if possible_moves == []:
+    king_square = find_king_pos(game_board, player_colour)
+    for escape_square in check_squares_around_king(king_square, game_board, player_colour):
+        simulated_board = [row[:] for row in game_board]
+        simulated_board = set_piece_at(escape_square,
+                                      get_piece_at(king_square, game_board),
+                                      simulated_board)
+        simulated_board = set_piece_at(king_square, EMPTY_SQUARE, simulated_board)
+        if not is_in_check(simulated_board, player_colour):
+            return False
+
+    return True
+
+def find_king_pos(game_board, player_colour):
+    """Finds and returns the algebraic square of player_colour’s king."""
+    king_piece = '♚' if player_colour=='White' else '♔'
+    for row_index, row_list in enumerate(game_board):
+        for col_index, piece in enumerate(row_list):
+            if piece == king_piece:
+                return indices_to_notation(col_index, row_index)
+    return None
+def update_board(from_square, to_square, game_board):
+    """
+    Moves the piece from from_square to to_square on game_board,
+    then clears the original square. Returns the updated board.
+    """
+    moving_piece = get_piece_at(from_square, game_board)
+    game_board   = set_piece_at(to_square, moving_piece, game_board)
+    game_board   = set_piece_at(from_square, EMPTY_SQUARE, game_board)
+    return game_board
+
+
+def get_legal_king_escape_squares(king_square_notation, game_board, player_colour):
+    """
+    Returns a list of all squares the king on king_square_notation
+    can legally move to (not occupied by friendlies and not into check).
+    """
+    legal_squares = []
+    king_file_index, king_rank_index = notation_to_indices(king_square_notation)
+    friendly_symbols = (
+        white_piece_symbols if player_colour == 'White'
+        else black_piece_symbols
+    )
+
+    # All eight directions around the king
+    for file_offset, rank_offset in [
+        (-1, -1), (0, -1), (1, -1),
+        (-1,  0),         (1,  0),
+        (-1,  1), (0,  1), (1,  1),
+    ]:
+        new_file = king_file_index + file_offset
+        new_rank = king_rank_index + rank_offset
+
+        # Skip off-board
+        if not (0 <= new_file < 8 and 0 <= new_rank < 8):
+            continue
+
+        adjacent_square = indices_to_notation(new_file, new_rank)
+        # Can't land on friendly piece
+        if get_piece_at(adjacent_square, game_board) in friendly_symbols:
+            continue
+        #debug_cool_print(f'Check3: {game_board}')
+        # Simulate king move and check for attack
+        simulated_board = [row[:] for row in game_board]
+        simulated_board = set_piece_at(
+            adjacent_square,
+            get_piece_at(king_square_notation, game_board),
+            simulated_board
+        ) # The board is a fake, so it doesn't change the actual board
+        simulated_board = set_piece_at(king_square_notation, EMPTY_SQUARE, simulated_board)
+        #debug_cool_print(f'Check2: {simulated_board}')
+        if not is_in_check(simulated_board, player_colour):
+            legal_squares.append(adjacent_square)
+
+    return legal_squares
+
+
+def is_in_check(game_board, player_colour, override_square='empty'):
+    """
+    Returns True if player_colour's king (or override_square) is under attack.
+    """
+    #debug_cool_print(f'Check: {game_board}')
+    defending_king_square = find_king_pos(game_board, player_colour)
+    target_square = (
+        defending_king_square
+        if override_square == 'empty'
+        else override_square
+    )
+    opponent_symbols = (
+        white_piece_symbols if player_colour == 'Black'
+        else black_piece_symbols
+    )
+    opponent_colour = 'Black' if player_colour == 'White' else 'White'
+
+    # Scan all squares for opposing pieces
+    for row_index in range(8):
+        for column_index in range(8):
+            #debug_cool_print(game_board)
+            piece = game_board[row_index][column_index]
+            if piece not in opponent_symbols:
+                continue
+
+            attacker_square = indices_to_notation(column_index, row_index)
+            validator = {
+                '♝': validate_bishop_move, '♗': validate_bishop_move,
+                '♜': validate_rook_move,   '♖': validate_rook_move,
+                '♛': validate_queen_move,  '♕': validate_queen_move,
+                '♞': validate_knight_move, '♘': validate_knight_move,
+                '♟': validate_pawn_move,   '♙': validate_pawn_move,
+                '♚': validate_king_move,   '♔': validate_king_move,
+            }[piece] #gets the right subroutine depending on the piece
+
+            if validator(attacker_square, target_square, game_board, opponent_colour):
+                return True
+
+    return False
+
+
+def is_checkmate(game_board, player_colour):
+    """
+    Returns True if player_colour's king is in check and has no legal escapes.
+    """
+    if not is_in_check(game_board, player_colour):
+        return False
+
+    king_square_notation = find_king_pos(game_board, player_colour)
+    for escape_square in get_legal_king_escape_squares(
+        king_square_notation, game_board, player_colour
+    ):
+        simulated_board = [row[:] for row in game_board]
+        simulated_board = set_piece_at(
+            escape_square,
+            get_piece_at(king_square_notation, game_board),
+            simulated_board
+        )
+        simulated_board = set_piece_at(king_square_notation, EMPTY_SQUARE, simulated_board)
+
+        if not is_in_check(simulated_board, player_colour):
+            return False
+
+    return True
+
+
+def find_king_position(game_board, player_colour):
+    """
+    Returns the king’s square in algebraic notation (e.g. "e1")
+    for the given player_colour on game_board.
+    """
+    king_symbol = '♚' if player_colour == 'White' else '♔'
+    for row_index, row in enumerate(game_board):
+        for col_index, piece in enumerate(row):
+            if piece == king_symbol:
+                return indices_to_notation(col_index, row_index)
+    return None
+
+
+def get_piece_at(square_notation, game_board, lookup_mode='default'):
+    """
+    Returns the piece at square_notation on game_board,
+    or EMPTY_SQUARE if the notation is out of bounds.
+    """
+    try:
+        col_index, row_index = notation_to_indices(square_notation)
+        return game_board[row_index][col_index]
+    except:
+        return EMPTY_SQUARE
+
+
+def set_piece_at(square_notation, piece_symbol, game_board):
+    """
+    Places piece_symbol on square_notation in game_board
+    and returns the updated board.
+    """
+    try:
+        col_index, row_index = notation_to_indices(square_notation)
+        game_board[row_index][col_index] = piece_symbol
+        return game_board
+    except:
+        separator('None', 'Off')
+        cool_print(Fore.RED + f"Could not edit piece at square {square_notation}" + Style.RESET_ALL)
+        return game_board
+
+
+def end_game(losing_player_colour):
+    """
+    Announces the winner (opposite of losing_player_colour)
+    and exits the program.
+    """
+    winner = 'White' if losing_player_colour == 'Black' else 'Black'
+    cool_print(
+        Fore.GREEN
+        + Style.BRIGHT
+        + f"Game over! {winner} wins by checkmate!"
+        + Style.RESET_ALL
+    )
+    exit()
+
+
+def debug_cool_print(message):
+    """Prints a debug message in magenta."""
+    cool_print(Fore.MAGENTA + f"{message}\n" + Style.RESET_ALL)
+
+
+def is_not_moving(start_square, end_square):
+    """
+    Returns False if the player attempted to move to the same square.
+    """
+    return start_square != end_square
+
+
+def is_moving_opponents_piece(start_square, game_board, player_colour):
+    """
+    Returns True if the piece at start_square belongs to the opponent.
+    """
+    piece_symbol = get_piece_at(start_square, game_board)
+    if player_colour == 'White' and piece_symbol in black_piece_symbols:
+        return True
+    if player_colour == 'Black' and piece_symbol in white_piece_symbols:
         return True
     return False
-    # if not check_check(board, colour):
-    #     return False
-    # king_square = find_king_pos(board, colour)
-    # possible_moves = check_squares_around_king(king_square, board, colour)
-    # if not possible_moves: #if len is 0 (no more posssible moves)
-    #     return True
-    # #may have to change code below? errors
-    # for move in possible_moves:
-    #     temp_board = [row[:] for row in board] #creating a new 2d list, an iterating through it
-    #     temp_board = edit_square(move, check_piece_at_square(king_square, temp_board), temp_board)
-    #     temp_board = edit_square(king_square, '.', temp_board)
-    #     if not check_check(temp_board, colour):
-    #         return False
-    # return True
 
 
+def validate_king_move(start_square, end_square, game_board, player_colour):
+    """
+    Returns True if the king moves exactly one square in any direction
+    and does not move into check.
+    """
+    start_file_ord = ord(start_square[0])
+    start_rank_int = int(start_square[1])
+    end_file_ord   = ord(end_square[0])
+    end_rank_int   = int(end_square[1])
 
-def find_king_pos(board,colour):
-    '''Finds the square of the king on the board in chess notation'''
-    #iterate through the board
-    if colour == 'White':
-        king = '♚'
+    # Must move exactly one square
+    if max(abs(end_file_ord - start_file_ord),
+           abs(end_rank_int - start_rank_int)) != 1:
+        return False
+
+    # Simulate the move to ensure the king is not placed in check
+    simulated_board = [row[:] for row in game_board]
+    simulated_board = set_piece_at(
+        end_square,
+        get_piece_at(start_square, game_board),
+        simulated_board
+    )
+    simulated_board = set_piece_at(start_square, EMPTY_SQUARE, simulated_board)
+    return not is_in_check(simulated_board, player_colour)
+
+
+def validate_queen_move(start_square, end_square, game_board, player_colour):
+    """
+    Returns True if the queen’s move is legal
+    (either rook-like or bishop-like).
+    """
+    return (
+        validate_rook_move(start_square, end_square, game_board, player_colour)
+        or validate_bishop_move(start_square, end_square, game_board, player_colour)
+    )
+
+
+def validate_pawn_move(start_square, end_square, game_board, player_colour):
+    """
+    Returns True if the pawn move from start_square to end_square
+    is legal under standard pawn rules.
+    """
+    start_file = start_square[0]
+    start_rank = int(start_square[1])
+    end_file   = end_square[0]
+    end_rank   = int(end_square[1])
+
+    forward_step =  1 if player_colour == 'White' else -1
+    home_rank    =  2 if player_colour == 'White' else 7
+    enemy_set    = (
+        black_piece_symbols if player_colour == 'White'
+        else white_piece_symbols
+    )
+
+    # Straight move
+    if start_file == end_file:
+        # must land on empty
+        if get_piece_at(end_square, game_board) != EMPTY_SQUARE:
+            return False
+        # one square forward
+        if end_rank - start_rank == forward_step:
+            return True
+        # two squares from home rank, intermediate empty
+        if start_rank == home_rank and end_rank - start_rank == 2 * forward_step:
+            intermediate = start_file + str(start_rank + forward_step)
+            return get_piece_at(intermediate, game_board) == EMPTY_SQUARE
+        return False
+
+    # Diagonal capture
+    if (
+        abs(ord(end_file) - ord(start_file)) == 1
+        and end_rank - start_rank == forward_step
+    ):
+        return get_piece_at(end_square, game_board) in enemy_set
+
+    return False
+
+
+def validate_knight_move(start_square, end_square, game_board, player_colour):
+    """
+    Returns True if the knight’s L-shaped move is legal.
+    """
+    start_file_ord = ord(start_square[0])
+    start_rank_int = int(start_square[1])
+    end_file_ord   = ord(end_square[0])
+    end_rank_int   = int(end_square[1])
+
+    file_diff = abs(end_file_ord - start_file_ord)
+    rank_diff = abs(end_rank_int - start_rank_int)
+    return sorted([file_diff, rank_diff]) == [1, 2]
+
+
+def validate_rook_move(start_square, end_square, game_board, player_colour):
+    """
+    Returns True if the rook’s move is legal (straight line, no blockers).
+    """
+    start_file, start_rank = start_square
+    end_file,   end_rank   = end_square
+
+    if start_file == end_file:
+        pieces_between, _ = pieces_in_between(
+            start_square, end_square, 'vertical', game_board
+        )
+    elif start_rank == end_rank:
+        pieces_between, _ = pieces_in_between(
+            start_square, end_square, 'horizontal', game_board
+        )
     else:
-        king = '♔'
-    row_index = -1
-    column_index = -1
-    for row in board:
-        row_index += 1
-        for column in row:
-            column_index += 1
-            if column == king:
-                location = reverse_notation(int(str(column_index) + str(row_index)))
-                location = location[0] + str(location[1])
-                test(f'Test is {location}')
-    return location
+        return False
 
-def check_squares_around_king(king_square,board,colour):
-    '''Returns a list of squares the opposing king is able to move to '''
-    possible_squares = []
-    king_square = turn_notation_compatible(king_square)
-    king_column = king_square[0]
-    king_row = king_square[1]
-    cases = [(-1,-1),(0,-1),(1,-1),
-             (-1,0),         (1,0),
-             (-1,1), (0,1), (1,1)]
-    #ITERATE THROUGH POSSIBLE CASES ABOVE
-    for case in cases:
-        case_column_offset = case[0]
-        case_row_offset = case[1]
-        current_square = str(king_column+case_column_offset) + str(king_row + case_row_offset)
-        possible_squares.append(current_square)
-    squares_around_king = []
-    for square in possible_squares:
-        if check_check(board,colour,square) == True:
-            continue
-        if len(square) == 2:
-            try:
-                if [reverse_notation(square)] == squares_in_board(reverse_notation(square)):
-                    squares_around_king.append(square)
-            except:
-                continue
-    
-    #add all the squares around the king
-    #remove all the squares outside the board
-    #remove all the squares occupied by the piece of the same colour
-    test(possible_squares)
-    return possible_squares
-'''Finish subroutines above here.'''
-def setup_players():
-    '''Gets the names of each player'''
-    print("Let's play!")
-    names = [input('Player 1 (White), enter your name.\n'), input('Player 2 (Black), enter your name.\n')]
-    return names
+    return all(p == EMPTY_SQUARE for p in pieces_between)
 
-def setup_board():
-    '''Creates a new random board'''
-    board = random_board(empty_board()) #creates an empty board, then randomises it
-    display_board(board) #displays the random board
-    return board
+
+def validate_bishop_move(start_square, end_square, game_board, player_colour):
+    """
+    Returns True if the bishop’s move is legal
+    (diagonal line, no blockers).
+    """
+    sc, sr = notation_to_indices(start_square)
+    ec, er = notation_to_indices(end_square)
+    # must lie on a diagonal
+    if abs(ec - sc) != abs(er - sr):
+        return False
+
+    pieces_between, _ = pieces_in_between(
+        start_square, end_square, 'diagonal', game_board
+    )
+    return all(p == EMPTY_SQUARE for p in pieces_between)
+
+
+def filter_squares_in_board(candidate_squares):
+    """
+    From a list of algebraic squares, returns only those
+    that lie within a valid 8×8 board.
+    """
+    valid_squares = []
+    for square in candidate_squares:
+        file, rank = square[0], square[1]
+        if file in 'abcdefgh' and rank in '12345678':
+            valid_squares.append(square)
+    return valid_squares
+
+
+def pieces_in_between(start_square, end_square, mode, game_board):
+    """
+    Returns ([pieces_between], direction) for moves in 'horizontal',
+    'vertical', or 'diagonal' mode—otherwise ([], None).
+    """
+    sc, sr = notation_to_indices(start_square)
+    ec, er = notation_to_indices(end_square)
+    blockers = []
+    direction = None
+
+    # horizontal
+    if mode == 'horizontal' and sr == er:
+        step = 1 if ec > sc else -1
+        direction = 'right' if step == 1 else 'left'
+        for col in range(sc + step, ec, step):
+            sq = indices_to_notation(col, sr)
+            blockers.append(get_piece_at(sq, game_board))
+        return [blockers, direction]
+
+    # vertical
+    if mode == 'vertical' and sc == ec:
+        step = 1 if er > sr else -1
+        direction = 'down' if step == 1 else 'up'
+        for row in range(sr + step, er, step):
+            sq = indices_to_notation(sc, row)
+            blockers.append(get_piece_at(sq, game_board))
+        return [blockers, direction]
+
+    # diagonal
+    if mode == 'diagonal' and abs(ec - sc) == abs(er - sr):
+        dc = 1 if ec > sc else -1
+        dr = 1 if er > sr else -1
+        if   (dc, dr) == ( 1, -1): direction = 'upright'
+        elif (dc, dr) == (-1, -1): direction = 'upleft'
+        elif (dc, dr) == ( 1,  1): direction = 'bottomright'
+        else:                       direction = 'bottomleft'
+
+        col, row = sc + dc, sr + dr
+        while (col, row) != (ec, er):
+            sq = indices_to_notation(col, row)
+            blockers.append(get_piece_at(sq, game_board))
+            col += dc; row += dr
+        return [blockers, direction]
+
+    return [[], None]
+
+def enforce_move_within_limit(blocking_pieces, movement_direction, starting_square, ending_square, player_colour):
+    """
+    Checks if the intended move from starting_square to ending_square
+    goes beyond the furthest reachable square along movement_direction.
+    """
+    step = 1 if movement_direction in ['right', 'up'] else -1
+    furthest_offset = 0
+    start_col, start_row = notation_to_index(starting_square)
+
+    for blocker in blocking_pieces:
+        if blocker == EMPTY_SQUARE:
+            furthest_offset += step
+        elif blocker in white_piece_symbols:
+            if player_colour == 'White':
+                break
+            furthest_offset += step
+        else:  # blocker in black_piece_symbols
+            if player_colour == 'Black':
+                break
+            furthest_offset += step
+
+    # Determine limit square and compare
+    if movement_direction in ['up', 'down']:
+        limit_square = indices_to_notation(start_col, start_row + furthest_offset)
+        end_rank = int(ending_square[1])
+        limit_rank = int(limit_square[1])
+        if end_rank > limit_rank:
+            return False
+    else:
+        limit_square = indices_to_notation(start_col + furthest_offset, start_row)
+        end_file_ord  = ord(ending_square[0])
+        limit_file_ord = ord(limit_square[0])
+        if end_file_ord > limit_file_ord:
+            return False
+
+    return True
+
+
+def notation_to_index(square_notation):
+    """
+    Converts algebraic notation (e.g. 'a4') into 0-based (column_index, row_index).
+    """
+    if isinstance(square_notation, list):
+        square_notation = f"{square_notation[0]}{square_notation[1]}"
+    notation = str(square_notation)
+    if len(notation) != 2:
+        separator('None', 'Off')
+        raise ValueError(f"Invalid square: {notation}")
+    file_char, rank_char = notation[0], notation[1]
+    column_index = ord(file_char) - ord('a')
+    row_index    = 8 - int(rank_char)
+    return column_index, row_index
+
+
+def indices_to_notation(column_index, row_index):
+    """
+    Converts 0-based (column_index, row_index) into algebraic notation like 'a1'.
+    """
+    if not (0 <= column_index < 8 and 0 <= row_index < 8):
+        separator('None', 'Off')
+        raise ValueError(f"Invalid board indices: {(column_index, row_index)}")
+    file_char = chr(column_index + ord('a'))  # 0 -> 'a'
+    rank_char = str(8 - row_index)            # 0 -> '8'
+    return file_char + rank_char
+
+
+def display_board(game_board):
+    """Nicely prints out the current state of the board."""
+    current_rank = 8
+    for rank in game_board:
+        print(f"{current_rank} {' '.join(rank)}")
+        current_rank -= 1
+
+    files_line = " ".join(chr(ord('A') + i) for i in range(len(game_board[0])))
+    print(f"  {files_line}")
+
 
 def empty_board():
-    '''Uses for loops to create an empty board, with numbers and letters to display row and column'''
-    board = [['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.'],
-             ['.','.','.','.','.','.','.','.']]
+    """Creates and returns an empty 8×8 board."""
+    return [[EMPTY_SQUARE ] * 8 for _ in range(8)]
+    
+
+
+def randomize_chess960_board(board):
+    """
+    Places shuffled Chess960 major pieces on rank 8 and 1,
+    pawns on rank 7 and 2.
+    """
+    white_backrank = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘']
+    black_backrank = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞']
+
+    random.shuffle(white_backrank)
+    random.shuffle(black_backrank)
+
+    board[0]  = white_backrank
+    board[-1] = black_backrank
+    board[1]  = ['♙'] * 8
+    board[-2] = ['♟'] * 8
+
     return board
 
-def display_board(board):
-    '''Display board'''
-    #clear() FOR TESTING ONLY! REMOVE # after complete
-    current_column = ord('A')
-    current_row = 8
-    for line in board:
-        print(f"{current_row} {" ".join(line)}")
-        current_row -= 1
-    
-    # Generate the column display
-    column_display = ""
-    board_length = len(board[0])
 
-    for i in range(board_length):
-        column_display += chr(current_column) + " "
-        current_column += 1
-
-    print(f"  {column_display}")
-
-def update_board(start,end,board):
-    '''Takes in a move, updates and returns the board'''
-    moving_piece = check_piece_at_square(start,board)
-    while moving_piece == '.': #prevents empty squares from moving
-        moving_piece = check_piece_at_square(start,board) #checks what piece it is moving from the start
-    board = edit_square(end,moving_piece,board) #gets the new board from edit_square after setting the piece on the end square
-    board = edit_square(start,'.',board) #sets the square it moved away from to blank
+def setup_board():
+    """Creates, displays, and returns a randomized Chess960 board."""
+    board = randomize_chess960_board(empty_board())
+    display_board(board)
     return board
 
-def random_board(random_board):
-    '''Shuffles the pieces, setting the whole row of white and black pieces to the 8th and 1st rank with board[-1] and board[0]'''
-    white_shuffle = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘']
-    black_shuffle = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞']
-
-    random.shuffle(white_shuffle)
-    random.shuffle(black_shuffle)
-
-    random_board[0] = white_shuffle
-    random_board[-1] = black_shuffle
-
-    random_board[1] = ['♙'] * 8 #makes the 2nd row from the bottoms pawns
-    random_board[-2] = ['♟'] * 8 #makes the 2nd row from the top pawns
-    return random_board
-
-def menu():
-    '''Starts up a menu to ask the user the instruction to do, then executes based on their choice'''
-    #cool_coloured_text('/mhello/cnew')
-    menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
-    while menu_result not in ['1', '2']:
-        #clear() TESTING ONLY! REMOVE # WHEN COMPLETE
-        menu_result = input('Welcome to Chess 960!\n1. Open instructions\n2. Start new game\nEnter what you want to do: ')
-    return menu_result
-
-def capture_own_check(end,board,colour):
-    '''Checks if a move ends on a piece of the same colour.'''
-    if colour == 'White':
-        if check_piece_at_square(end,board) in white_pieces:
-            return False
-            
-        else:
-            return True
-    else:
-        if check_piece_at_square(end,board) in black_pieces:
-            return False
-        else:
-            return True
-
-def no_move_check(start,end):
-    '''Checks if the starting square is the same as the ending square.'''
-    if start == end:
-        return False
-    else:
-        return True
-
-def opposite_turn_movement(start,board,colour):
-    '''Returns false if a piece is selected on the opponent's turn'''
-    if check_piece_at_square(start,board) in black_pieces and colour == 'White': #selecting black piece during white turn
-        return False
-    elif check_piece_at_square(start,board) in white_pieces and colour == 'Black': #selecting white piece during black turn
-        return False
-    else:
-        return True
-    
-def king_conditions(start,end,board,colour):
-    '''Returns true if the king move is legal'''
-    #needs to make an incheck() and checkmate() functions first
-    pass
-
-def queen_conditions(start,end,board,colour):
-    '''Returns true if the queen move is legal'''
-    if rook_conditions(start,end,board,colour) or bishop_conditions(start,end,board,colour):
-        return True
-    else:
-        return False
-    
-def pawn_conditions(start,end,board,colour):
-    '''Returns true if the pawn move is legal'''
-    #cant capture own pieces
-    if colour == 'White':
-        test('Pawn is white')
-        if start[0] == end[0]: #same column
-            test('column is the same')
-            pieces, _ = pieces_in_between(start,end,'vertical',board) #gets piecesinbetween[0]
-            print(pieces)
-            empty_squares_only = True
-            for square in pieces:
-                test(square)
-                if square not in ['.','',' ', None]:  
-                    empty_squares_only = False
-                    test('pieces in between')
-                    return False
-            if empty_squares_only:
-                test('squares between are empty')
-                if int(end[1]) - int(start[1]) == 2:
-                    if start[1] == '2':  # White pawns start from rank 2
-                        return True
-                    else:
-                        return False
-                elif int(end[1]) - int(start[1]) == 1:  # normal 1-square move
-                    return True
-
-        elif abs(ord(start[0]) - ord(end[0])) == 1: #captures have 1 column difference
-            test('column difference = 1')
-            if check_piece_at_square(end,board) in black_pieces: #if end square is black pieces, and column diff is 1 then it is a capture
-                if int(end[1]) - int(start[1]) == 1:
-                    return True
-            # TODO: EN PASSANT
-            return False
-
-        else:
-            test('movement not possible')
-            return False
-
-    else: # Black pawn
-        test('Pawn is black')
-
-        if start[0] == end[0]:
-            test('column is the same')
-            pieces, _ = pieces_in_between(start,end,'vertical',board)
-            print(pieces)
-            empty_squares_only = True
-            for square in pieces:
-                test(square)
-                if square not in ['.','',' ', None]:  # <-- same fix
-                    empty_squares_only = False
-                    test('pieces in between')
-                    return False
-            if empty_squares_only:
-                test('squares between are empty')
-                if int(start[1]) - int(end[1]) == 2:  # <-- reverse for black
-                    if start[1] == '7':
-                        return True
-                    else:
-                        return False
-                elif int(start[1]) - int(end[1]) == 1:  # normal 1-square move
-                    return True
-
-        elif abs(ord(start[0]) - ord(end[0])) == 1:
-            test('column difference = 1')
-            if check_piece_at_square(end,board) in white_pieces:
-                if int(start[1]) - int(end[1]) == 1: 
-                    return True
-            # TODO: EN PASSANT
-            return False
-
-        else:
-            test('movement not possible')
-            return False
-
-
-def knight_conditions(start,end,board,colour):
-    '''Returns true if the knight move is legal'''
-    start_column, start_row = start #multi variable assignment
-    end_column, end_row = end
-    start_row, end_row = int(start_row), int(end_row)
-    
-    if abs(ord(end_column) - ord(start_column)) == 1: #Case 1:Forward and backward knight moves
-        if abs(end_row - start_row) == 2: #Should be 2 if it moves up and down L shape
-            return True
-        else:
-            return False
-    elif abs(ord(end_column) - ord(start_column)) == 2: #Case 2: Left right knight moves
-        if abs(end_row - start_row) == 1: #Should be 1 if it moves sideways L shape
-            return True
-        else:
-            return False
-    else:
-        return False
-
-def rook_conditions(start, end, board, colour):
-    '''Returns true if the rook move is legal'''
-    # Check for vertical movement
-    if start[0] == end[0]:  # Same column
-        pieces, direction = pieces_in_between(start, end, 'vertical', board)
-        test(pieces)
-        # Ensure all pieces between the start and end are empty
-        if len(pieces) != 0: #len 0 needs special case
-            for piece in pieces:
-                if piece != '.': #if the square is not empty
-                    return False  # Blocked by another piece
-        else:
-            if check_piece_at_square(end,board) == '.':
-                test('end is empty')
-                return True
-        if move_limits(pieces,direction,start,end,colour) == True:
-            return True
-        else:
-            return False
-
-    # Check for horizontal movement
-    elif start[1] == end[1]:  # Same row
-        pieces, direction = pieces_in_between(start, end, 'horizontal', board)
-        test(pieces)
-        # Ensure all pieces between the start and end are empty
-        if len(pieces) != 0: #len 1 needs special case (moving 1 square past)
-            for piece in pieces:
-                if piece != '.': #if the square is not empty
-                    return False  # Blocked by another piece
-        else:
-            if check_piece_at_square(end,board) == '.':
-                test('end is empty')
-                return True
-            
-        if move_limits(pieces,direction,start,end,colour) == True:
-            return True
-        else:
-            return False
-    
-    return False  #invalid move (not straight)
-
-def bishop_conditions(start,end,board,colour):
-    '''Returns true if the bishop move is legal'''
-    #setup direction and pieces
-    direction = pieces_in_between(start,end,'diagonal',board)
-    pieces = []
-
-    start_column, start_row = turn_notation_compatible(start)
-    start_column_int, start_row_int = int(start_column), int(start_row)
-    #generate a list of all possible moves for 4 cases
-    possible_end_squares = [] 
-    #case 1: diagonal, up, right
-    for _ in range(8): #since bishops can move furthest, 8 squares in a specific direction
-        start_column = str(int(start_column) + 1) #right
-        start_row = str(int(start_row) - 1) #up #inverted row scale, high notation row = low row
-        current_square = start_column + start_row
-
-        if len(current_square) == 2:
-            test(f'case 1 {reverse_notation(current_square)}')
-            possible_end_squares.append(reverse_notation(current_square))  #adds the square 1 up and 1 right of the previous
-            if direction == 'upright' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-                pieces.append(check_piece_at_square(reverse_notation(current_square)))
-    
-        # Case 2: diagonal, up, left
-    temp_column = start_column_int
-    temp_row = start_row_int
-    for _ in range(8):
-        temp_column -= 1  # left
-        temp_row -= 1     # up (inverted row scale)
-        current_square = str(temp_column) + str(temp_row)
-        if len(current_square) == 2:  # This now works correctly because temp_row is int, no negative sign
-            test(f'case 2 {reverse_notation(current_square)}')
-            possible_end_squares.append(reverse_notation(current_square))
-            if direction == 'upleft' and [reverse_notation(current_square)] == squares_in_board(current_square):
-                pieces.append(check_piece_at_square(reverse_notation(current_square)))
-
-    # Case 3: diagonal, down, right
-    temp_column = start_column_int
-    temp_row = start_row_int
-    for _ in range(8):
-        temp_column += 1  # right
-        temp_row += 1     # down
-        current_square = str(temp_column) + str(temp_row)
-        if len(current_square) == 2:
-            test(f'case 3 {reverse_notation(current_square)}')
-            possible_end_squares.append(reverse_notation(current_square))
-            if direction == 'bottomright' and [reverse_notation(current_square)] == squares_in_board(current_square):
-                pieces.append(check_piece_at_square(reverse_notation(current_square)))
-            
-    #case 4: diagonal, down, left
-    for _ in range(8): 
-        start_column = str(int(start_column) - 1) #left
-        start_row = str(int(start_row) + 1) #down  #inverted row scale, high notation row = low row
-        current_square = start_column + start_row
-        
-        if len(current_square) == 2:
-            test(f'case 4 {reverse_notation(current_square)}')
-            possible_end_squares.append(reverse_notation(current_square)) 
-            if direction == 'bottomleft' and [reverse_notation(current_square)] == squares_in_board(current_square): #if square is in the board and moving upright
-                pieces.append(check_piece_at_square(reverse_notation(current_square)))
-
-    possible_end_squares = squares_in_board(possible_end_squares) #only gets the squares inside the board
-    test(possible_end_squares)
-    for index in range(len(possible_end_squares)):
-        possible_end_squares[index] = possible_end_squares[index][0] + str(possible_end_squares[index][1])
-    test(possible_end_squares)
-    if end in possible_end_squares: #if the end square is in the list of all possible squares
-        for piece in pieces:
-            if piece != '.':
-                return False #not empty squares in between
-        return True
-    else:
-        return False #if the end square is not within bishop scope and moves
-    
-def squares_in_board(list_of_squares):
-    '''Checks if squares are part of the board. Returns a list of squares only part of the board.'''
-    new_list_squares = []
-    for square in list_of_squares:
-        if square[0] in ['a','b','c','d','e','f','g','h'] and square[1] in [1,2,3,4,5,6,7,8]:
-            new_list_squares.append(square)
-    return new_list_squares
-
-def pieces_in_between(start, end, mode, board):
-    '''Returns the list of pieces in between 2 squares, depending on the mode. Also returns the direction from start to end.'''
-    start_row, start_column = turn_notation_compatible(start) #makes start row and column into compatible notation[0] and [1]
-    end_row, end_column = turn_notation_compatible(end)
-
-    pieces_between = []
-
-    if mode == 'horizontal':
-        if end_column > start_column: #if moving right
-            step = 1
-            direction = 'right'
-        else:
-            step = -1 #if moving left
-            direction = 'left'
-        
-        for column in range(start_column + step, end_column, step):  # Exclusive of start and end
-            square = chr(column + 97) + str(8 - start_row)  # Convert back to chess notation
-            piece_at_square = check_piece_at_square(square, board)
-            pieces_between.append(piece_at_square)
-
-    elif mode == 'vertical':
-        if end_row > start_row: #moving down
-            step = 1
-            direction = 'down'
-        else:
-            step = -1
-            direction = 'up'
-        
-        for row in range(start_row + step, end_row + step, step):  # Exclusive of start 
-            square = chr(start_column + 97) + str(8 - row)  # Convert back to chess notation
-            piece_at_square = check_piece_at_square(square, board)
-            pieces_between.append(piece_at_square)
-    else: #mode = diagonal
-        # 4 cases
-        start_column, start_row = turn_notation_compatible(start) #notation is (11) example
-        end_column, end_row = turn_notation_compatible(end) #notation is (12) example
-
-        if end_column > start_column and end_row < start_row: #top right, as row scale is inverted
-            direction = 'upright'
-        elif end_column < start_column and end_row < start_row: #top left
-            direction = 'upleft'
-        elif end_column > start_column and end_row > start_row: #bottom right
-            direction = 'bottomright'
-        elif end_column < start_column and end_row > start_row: #bottom left
-            direction = 'bottomleft'
-        else:
-            direction = None
-        return direction #returns direction only, instead of pieces and direction
-    return [pieces_between,direction]  #return pieces in between
-    
-
-def move_limits(pieces_in_between, direction, start_square, end_square, colour):
-    '''Finds the furthest square to move to, based on the direction of movement and the square the user wants to move from and to.'''
-    black_pieces = ['♔', '♕', '♖', '♖', '♗', '♗', '♘', '♘','♙']
-    white_pieces = ['♚', '♛', '♜', '♜', '♝', '♝', '♞', '♞','♟']
-    if direction in ['right', 'up']:
-        step = 1
-    else:
-        step = -1
-    furthest = 0
-    start = turn_notation_compatible(start_square)
-    for square in pieces_in_between:
-        if square == '.': #if the square is empty, extend the furthest square possible
-            furthest += step
-        elif square in white_pieces: #if the piece is white at the square
-            if colour == 'White':
-                break #furthest it can move
-            else: #colour is black
-                furthest += step #furthest includes taking the white piece
-        else: #square in black pieces
-            if colour == 'Black':
-                furthest += step
-            else:
-                break
-    if direction == 'up' or direction == 'down': #add furthest to row.
-        furthest_square = int(str(start[0]) + str(start[1] + furthest)) #error 
-        print(f'TEST: {furthest_square} and {turn_notation_compatible(furthest_square)} and {reverse_notation(furthest_square)}') #TESTING ONLY
-        furthest_square = reverse_notation(furthest_square)
-        if int(end_square[1]) > furthest_square[1]:
-            print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
-            return False
-        else:
-            return True
-        
-    elif direction == 'right' or direction == 'left': #adds furthest to column
-        furthest_square = int(str(start[0] + furthest) + str(start[1])) #error on this line
-        #FURTHEST SQUARE IS ALREADY NI COMPATIBLE FORM
-        print(f'Test {furthest_square}')
-        print(f'TEST: {furthest_square} and {reverse_notation(furthest_square)}') #TESTING ONLY
-        furthest_square = reverse_notation(furthest_square)
-        print(type(furthest_square[0]),type(end_square[0]))
-        print(end_square,furthest_square)
-        if int(ord(end_square[0])) > int(ord(furthest_square[0])): #if the square the user wants to move to is further than what is possible
-            print(f'You cannot move to {end_square}. The furthest you can move to with that piece is {furthest_square}')
-            return False #move not legal
-        else:
-            return True
-
-    print(f'When you tried to move from {start_square} to {end_square}, the furthest you could move to was {furthest_square}') #TESTING
-    
-
-
-
-def turn_notation_compatible(square):
-    '''Turns the notation in chess format (a4) into an indexable format (04)'''
+def notation_to_indices(square):
+    '''Turns chess format (like a4) into indexable format [column,row]'''
+    if type(square) == list:
+        square = str(square[0]) + str(square[1])
     square = str(square)
-    
-    # error if its not 2 digits (prevents it from working)
+
     if len(square) != 2:
-        raise ValueError(f'Square must be in the format "letternumber", received: {square}')
-    
-    # convert letter to index (0-7)
-    column = ord(square[0]) - ord('a')  
-    
-    # Convert number to index (0-7)
-    row = 8 - int(square[1])  
-    
-    return [column, row]  #return as a list of column and row indices
+        separator('None', 'Off')
+        raise ValueError(f"Invalid square: {square}")
+
+    column = ord(square[0]) - ord('a')
+    row = 8 - int(square[1])
+    return [column, row]
 
 
-
-
-def reverse_notation(square):
-    '''Turns notation in row, column back into chess notation'''
-    square = str(square)
-    if len(square) != 2:
-        print(f'Square is {len(square)} digits long, and the value is {square}')
-        #raise ValueError
-    print(f'SQUARE IS {square}') #TESTING ONLY
-    new_row = 8 - int(str(square)[1])
-    new_column = chr(int(str(square)[0]) + 97)
-    return [new_column,new_row]
-
-def test(message):
-    '''To make it clear that a print message is for testing purposes'''
-    print(Fore.MAGENTA + f'{message}\n' + Style.RESET_ALL)
 
 
 main()
