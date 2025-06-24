@@ -85,6 +85,7 @@ def choose_theme():
     while mode not in ('light','dark'):
         separator('None', 'Off')
         cool_print('Light mode is' + Style.BRIGHT + ' very ' + Style.RESET_ALL + 'buggy. Please switch your GitHub theme to '+ Style.BRIGHT + 'dark mode.' + Style.RESET_ALL )
+        cool_print('Using LIGHT THEME in github will switch the colours of the sides, making black start first and on the bottom.')
         mode = cool_print('Are you using (light) mode or (dark) mode in GitHub right now?\n', 'Input').strip().lower()
     if mode == 'light':
         # “normal” mapping
