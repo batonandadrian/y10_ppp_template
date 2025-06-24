@@ -84,9 +84,23 @@ def choose_theme():
     mode = ''
     while mode not in ('light','dark'):
         separator('None', 'Off')
+        cool_print('Light mode is' + Style.BRIGHT + ' very ' + Style.RESET_ALL + 'buggy. Please switch your GitHub theme to '+ Style.BRIGHT + 'dark mode.' + Style.RESET_ALL )
         mode = cool_print('Are you using (light) mode or (dark) mode in GitHub right now?\n', 'Input').strip().lower()
     if mode == 'light':
         # “normal” mapping
+        cool_print('I told you not to select light mode. The game is not going to work properly. Switch your GitHub theme to dark mode and choose dark mode at the start.')
+        prevent_light = True
+        while prevent_light:
+            cool_print('Do you wish to continue? Y/N')
+            continue_or_not = input()
+            if continue_or_not == 'Y':
+                cool_print('Please go back and select dark mode on GitHub and choose dark mode in the first prompt.')
+                raise RuntimeError(Style.BRIGHT + 'You are not allowed to select light mode.' + Style.RESET_ALL)
+                prevent_light = False
+                break
+
+        
+        
         return (['♔','♕','♖','♗','♘','♙'],  # white actually rendered light
                 ['♚','♛','♜','♝','♞','♟'])  # black actually rendered dark
     else:
@@ -851,7 +865,7 @@ def display_board(game_board):
 
 
 def empty_board():
-    """Creates and returns an empty 8×8 board."""
+    """Creates and returns an empty 8 by 8 board."""
     return [[EMPTY_SQUARE ] * 8 for _ in range(8)]
     
 
@@ -866,11 +880,17 @@ def randomize_chess960_board(board):
 
     random.shuffle(white_backrank)
     random.shuffle(black_backrank)
+    if '♔' in white_piece_symbols:
+        board[-1]  = white_backrank
+        board[0] = black_backrank
+        board[-2]  = ['♙'] * 8
+        board[1] = ['♟'] * 8
 
-    board[0]  = white_backrank
-    board[-1] = black_backrank
-    board[1]  = ['♙'] * 8
-    board[-2] = ['♟'] * 8
+    else:
+        board[0]  = white_backrank
+        board[-1] = black_backrank
+        board[1]  = ['♙'] * 8
+        board[-2] = ['♟'] * 8
 
     return board
 
